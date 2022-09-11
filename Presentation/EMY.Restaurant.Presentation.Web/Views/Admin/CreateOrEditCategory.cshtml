@@ -1,0 +1,25 @@
+﻿@model EMY.Restaurant.Core.Domain.Entities.MenuCategory
+@Html.AntiForgeryToken()
+<input type="hidden" asp-for="MenuCategoryID" />
+<div class="form-group">
+    <label asp-for="Name" class="control-label"></label>
+    <input asp-for="Name" class="form-control bg-dark text-light" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+    </ hr>
+<div class="form-group">
+    <label asp-for="Description" class="control-label"></label>
+    <textarea asp-for="Description" class="form-control bg-dark text-light"></textarea>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="control-label">Banner (1400x780)</label>
+    <input id="headerPhoto" name="headerPhoto" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff" class="form-control bg-dark text-light" />
+</div>
+<div class="form-group">
+    <label class="control-label">Logo (248x248)</label>
+    <input id="logoPhoto" name="logoPhoto" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff" class="form-control bg-dark text-light" />
+</div>
+<script>
+    cleanPage();
+</script>

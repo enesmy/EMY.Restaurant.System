@@ -1,0 +1,440 @@
+﻿@using EMY.Restaurant.Infrastructure.Persistence
+@using Serilog
+@{
+    ViewData["Title"] = "Dynamic Home Page";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+    Log.Debug("Header ok!");
+}
+
+<table class="table table-sm table-responsive-md">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" colspan="3">Home Page Contents</th>
+        </tr>
+
+    </thead>
+    <tbody class="tbody-light">
+        <tr> <th scope="col" colspan="3">Under Slider</th></tr>
+        <tr>
+            <td>
+                First Picture 600x400px
+            </td>
+            <td>
+                <input id="FirstImage" name="FirstImage" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('FirstImage','FirstImage')">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                First Header
+            </td>
+            <td>
+                @{
+                    Log.Debug("First Editorfor");
+                }
+                @Html.EditorFor(modelItem => HomePageConfiguration.FirstHeader, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+                
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('FirstHeader',document.getElementById('FirstHeader').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                First Content
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.FirstText, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('FirstText',document.getElementById('FirstText').value)">Save</button>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                First Url
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.FirstUrl, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('FirstUrl',document.getElementById('FirstUrl').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Second Picture 600x400px
+            </td>
+            <td>
+                <input id="SecondImage" name="SecondImage" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('SecondImage','SecondImage')">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Second Header
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.SecondHeader, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('SecondHeader',document.getElementById('SecondHeader').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Second Content
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.SecondText, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('SecondText',document.getElementById('SecondText').value)">Save</button>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                Second Url
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.SecondUrl, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('SecondUrl',document.getElementById('SecondUrl').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Third Picture 600x400px
+            </td>
+            <td>
+                <input id="ThirdImage" name="ThirdImage" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('ThirdImage','ThirdImage')">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Third Header
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.ThirdHeader, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('ThirdHeader',document.getElementById('ThirdHeader').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Third Content
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.ThirdText, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('ThirdText',document.getElementById('ThirdText').value)">Save</button>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                Third Url
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.ThirdUrl, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('ThirdUrl',document.getElementById('ThirdUrl').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr style="border-top: 2px dashed black;"></td>
+        </tr>
+        <tr>
+            <td>
+                Youtube Capture 350x440px
+            </td>
+            <td>
+                <input id="YoutubeVideoPhoto" name="YoutubeVideoPhoto" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('YoutubeVideoPhoto','YoutubeVideoPhoto')">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Youtube Video Url
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.YoutubeVideoUrl, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('YoutubeVideoUrl',document.getElementById('YoutubeVideoUrl').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Video Rightside Header
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.VideoRightsideHeader, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('VideoRightsideHeader',document.getElementById('VideoRightsideHeader').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Video Rightside Content
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.VideoRightsideContent, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('VideoRightsideContent',document.getElementById('VideoRightsideContent').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Celebration Background
+            </td>
+            <td>
+                <input id="CelebrationImageUrl" name="CelebrationImageUrl" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('CelebrationImageUrl','CelebrationImageUrl')">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Celebration Header 1
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.CelebrationHeader1st, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CelebrationHeader1st',document.getElementById('CelebrationHeader1st').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Celebration Header 2
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.CelebrationHeader2nd, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CelebrationHeader2nd',document.getElementById('CelebrationHeader2nd').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Celebration Content
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.CelebrationContent, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CelebrationContent',document.getElementById('CelebrationContent').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Celebration Url
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.CelebrationUrl, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CelebrationUrl',document.getElementById('CelebrationUrl').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Whatsapp Number
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.WhatsappNumber, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('WhatsappNumber',document.getElementById('WhatsappNumber').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Phone Number
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.PhoneNumber, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('PhoneNumber',document.getElementById('PhoneNumber').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Address
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.Adress, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('Adress',document.getElementById('Adress').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Email
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.Email, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('Email',document.getElementById('Email').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Open Hours
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.OpenHours, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('OpenHours',document.getElementById('OpenHours').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Facebook
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.FaceBook, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('FaceBook',document.getElementById('FaceBook').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Instagram
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.Instagram, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('Instagram',document.getElementById('Instagram').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Youtube
+            </td>
+            <td>
+                @Html.EditorFor(modelItem => HomePageConfiguration.Youtube, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('Youtube',document.getElementById('Youtube').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Datenschutz
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.Datenschutz, new { @class = "", type="text", style="width:100%; box-sizing: border-box;" })
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('Datenschutz',document.getElementById('Datenschutz').value)">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Impressum
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.Impressum,  new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } )
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('Impressum',document.getElementById('Impressum').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr style="border-top: 2px dashed black;"></td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function SaveContent(key, value) {
+
+        MessageBox.AjaxPost('/Admin/SaveHomePageContent',
+            {
+                key: key,
+                value: value
+            },
+            function (data) {
+                MessageBox.ShowMessage(data);
+                console.log(data);
+            }, function (data) {
+                MessageBox.Show('Error!', data);
+            });
+    }
+
+    function SavePicture(key, idElement) {
+        var formData = new FormData();
+        formData.append('key', key);
+        formData.append('photoContent', document.getElementById(idElement).files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/UploadHomePageContent',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                MessageBox.ShowMessage('Succeed!');
+                location.reload();
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+</script>

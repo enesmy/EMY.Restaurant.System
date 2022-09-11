@@ -1,0 +1,58 @@
+﻿@model List<EMY.Restaurant.Core.Domain.Entities.Menu>
+
+@{
+    ViewData["Title"] = $"Search Results for ({ViewBag.q})";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+}
+
+
+
+
+<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <h1>Suche : @ViewBag.q </h1>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame white"></div>
+</div>
+<!-- /hero_single -->
+
+<div class="pattern_2">
+    <div class="container margin_60_40" data-cues="slideInUp" data-disabled="true">
+
+        <div class="row add_bottom_45 magnific-gallery" data-cue="slideInUp" data-show="true"
+             style="animation-name: slideInUp; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;">
+
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-6" data-cue="slideInUp" data-show="true"
+                 style="animation-name: slideInUp; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 180ms; animation-direction: normal; animation-fill-mode: both;">
+                    <div class="menu_item">
+                        <figure>
+                            <a href="/Uploads/Photos/@item.PhotoFileName" title="@item.Name" data-effect="mfp-zoom-in">
+                                <img src="/Uploads/Photos/@item.PhotoThumbFileName" data-src="/Uploads/Photos/@item.PhotoThumbFileName"
+                                 class="lazy loaded" alt="" data-was-processed="true">
+                            </a>
+                        </figure>
+                        <div class="menu_title">
+                            <h3>(@item.Code) @item.Name</h3><em>@item.Price €</em>
+                        </div>
+                        <p>@item.Description</p>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+
+    </div>
+    <!-- /container -->
+</div>
+<!-- /pattern_2 -->

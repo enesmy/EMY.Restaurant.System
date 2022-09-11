@@ -1,0 +1,117 @@
+﻿@using EMY.Restaurant.Core.Domain.Common
+@using EMY.Restaurant.Core.Domain.Entities;
+@model IEnumerable<User>
+
+@{
+    ViewData["Title"] = "User List";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a class="btn btn-sm btn-outline-light border-dark btn-dark" asp-action="Register"><i class="fas fa-user-plus"></i> Register</a>
+</p>
+<table class="table table-hover  table-responsive-lg">
+    <thead>
+        <tr>
+            <th>
+                <i class="fas fa-fingerprint"></i>
+            </th>
+            <th>
+                User Name
+            </th>
+            <th>
+                Name Last Name
+            </th>
+            <th>
+                E-Mail
+            </th>
+            <th>
+                User Group
+            </th>
+            <th>
+                &nbsp;                
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr @Html.Raw(!item.IsActive ? "class='deleted'" : "")>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.Raw(item.Name + " " + item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DropDownListFor(modelItem => item.UserGroupID, new SelectList(ViewBag.userGroup, "Value", "Text"), "-User Group-", htmlAttributes: new { @class = "dropdown", onchange = $"demo('{item.UserID}')", @id = "userGroup_" + item.UserID.ToString() })
+                </td>
+                <td class="buttons">
+
+                    @if (!item.IsActive)
+                    {
+                        <a class="btn btn-sm btn-success" href="/Account/Activate?UserID=@item.UserID">
+                            <i class="fas fa-unlock-alt"></i> Unlock Account
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-danger" href="/Account/DeActivate?UserID=@item.UserID">
+                            <i class="fas fa-lock"></i> Lock Account
+                        </a>
+                    }
+                    | <a class="btn btn-sm btn-info" href="/Account/ResetPassword?UserID=@item.UserID">
+                        <i class="fas fa-sync-alt"></i> Reset Password(123456)
+                    </a>
+                    | <a class="btn btn-sm btn-dark" href="/Account/RoleManager?usergroupid=@item.UserGroupID">
+                        <i class="fas fa-check-double"></i> Authorizes
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+<style>
+    .deleted td:not(.buttons) {
+        text-decoration: line-through
+    }
+</style>
+<script>
+    function demo(profile) {
+        console.log(profile)
+        var item = document.getElementById('userGroup_' + profile);
+        if (item.value >= 1) {
+            $.ajax({
+                url: "/Account/ChangeUserGroup",
+                type: "POST",
+                data:
+                {
+                    ProfileID: profile,
+                    NewUserGroupID: item.value
+                },
+                success: function (data) {
+                    $("#errorMessage").hide();
+                    $("#general").html('<div class="alert alert-info" id="FirstResult"><b>' + data + '</b></div>');
+                    $("#general").show();
+                }, error: function (xhr, ajaxOptions, thrownError) {
+                    $("#errorMessage").html(xhr.responseJSON.detail);
+                    $("#errorMessage").show();
+                    $("#general").hide();
+                }
+            });
+        }
+    }
+</script>

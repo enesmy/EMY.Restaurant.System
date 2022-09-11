@@ -1,0 +1,131 @@
+﻿@using EMY.Restaurant.Infrastructure.Persistence
+@inject IDatabaseFactory database;
+
+@{
+    ViewData["Title"] = "Home Page Slider";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+    var allSLides = database.SliderContentRead.GetWhere(o => !o.IsDeleted).OrderBy(o=>o.SliderIndex).ToList();
+}
+
+<h1>Home Page Slider</h1>
+
+
+
+<table class="table table-sm table-responsive-md">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Index</th>
+            <th scope="col">Photo</th>
+            <th scope="col">Header</th>
+            <th scope="col">Content</th>
+            <th scope="col">Align</th>
+            <th scope="col">Link</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+
+    </thead>
+    <tbody class="tbody-light">
+
+        @foreach (var item in allSLides)
+        {
+            <tr id="@item.SliderContentID">
+                <td>
+                    @Html.DisplayFor(o=> item.SliderIndex)
+                </td>
+                <td>
+                    <img src="/Uploads/Photos/@item.ImgUrl"
+                     data-src="/Uploads/Photos/@item.ImgUrl" height="100" />
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(o=> item.Header)
+                </td>
+                <td>
+                    @Html.DisplayFor(o=> item.Content)
+                </td>
+                <td>
+                    @Html.DisplayFor(o=> item.Side)
+                </td>
+                <td>
+                    @Html.DisplayFor(o=> item.Link)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteIt('@item.SliderContentID')"><i class="fas fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        }
+
+
+        <tr>
+            <td>
+                <input type="number" value="0" max="10" id="newelementIndex" />
+            </td>
+            <td>
+                <input id="newelementPhoto" name="newelementPhoto" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <input type="text" id="newelementHeader" />
+            </td>
+            <td>
+                <input type="text" id="newelementContent" />
+            </td>
+            <td>
+                <select id="newelementAlign">
+                    <option value="0">Left</option>
+                    <option value="1">Middle</option>
+                    <option value="2">Right</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" id="newelementLink" />
+            </td>
+            <td>
+                <button class="btn btn-sm btn-success" onclick="addNew();"><i class="fas fa-solid fa-plus"></i></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<script>
+    function addNew(){
+        var formData = new FormData();
+        formData.append('newelementIndex', document.getElementById('newelementIndex').value);
+        formData.append('newelementPhoto', document.getElementById('newelementPhoto').files[0]);
+        formData.append('newelementHeader', document.getElementById('newelementHeader').value);
+        formData.append('newelementContent', document.getElementById('newelementContent').value);
+        formData.append('newelementAlign', document.getElementById('newelementAlign').value);
+        formData.append('newelementLink', document.getElementById('newelementLink').value);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SaveNewSliderContent',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {               
+                location.reload();
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+
+    function deleteIt(id){
+        MessageBox.AskAccept
+            ('Delete!', 'Are you sure you want to delete this Slide?',
+                function deleteit() {
+                    MessageBox.AjaxPost(
+                        '/Admin/DeleteSlide',
+                        { slideId: id },
+                        function (data) {
+                            console.log('Success!', data)
+                            location.reload();
+                        },
+                        function (data) {
+                            MessageBox.Show('Error', data.responseText)
+                        }
+                    );
+                }
+            );
+    }
+</script>

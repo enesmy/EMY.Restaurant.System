@@ -1,0 +1,138 @@
+﻿@using EMY.Restaurant.Core.Domain.Common
+@using EMY.Restaurant.Core.Domain.Entities;
+@model IEnumerable<UserGroup>
+
+@{
+    ViewData["Title"] = "User Groups";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+}
+
+<h1>User Groups</h1>
+
+<p>
+    <a class="btn btn-sm btn-outline-light border-dark btn-dark" onclick="CreateRecord();"><i class="fas fa-users-cog"></i> Create New</a>
+</p>
+<table id="tblRecords" class="table table-responsive-lg">
+    <thead>
+        <tr>
+            <th>
+                <i class="fas fa-fingerprint"></i>
+            </th>
+            <th>
+                Code
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Tool Tip
+            </th>
+            <th>
+                Default
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr id='@Html.Raw("row"+item.UserGroupID)'>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserGroupID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserGroupCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserGroupName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserGroupToolTip)
+                </td>
+                <td>
+                    @if (item.DefaultUserGroup)
+                    {
+                        <i class="fa fa-check-circle fa-green" aria-hidden="true"></i>
+                    }
+                    else
+                    {
+                        <a class="btn btn-danger btn-sm" onclick="setDefault(@item.UserGroupID)"><i class="fas fa-check-double"></i> Set Default</a>
+                    }
+
+                </td>
+
+                <td align="left">
+                    <a class="btn btn-success btn-sm" asp-controller="Account" asp-action="RoleManager" asp-route-usergroupid="@item.UserGroupID"><i class="fas fa-key"></i> Roles</a>
+                    <a class="btn btn-info btn-sm" onclick="editRecord('@item.UserGroupID','@item.UserGroupCode','@item.UserGroupName','@item.UserGroupToolTip');"><i class="fas fa-edit"></i> Modify</a>
+
+                    @if (!item.DefaultUserGroup)
+                    {
+                        <a class="btn btn-danger btn-sm" onclick="delrecord(@item.UserGroupID)"><i class="fas fa-trash"></i> Delete</a>
+
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- New or Edit User Group Modal-->
+<div class="modal fade" id="NewOrEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Code
+                    </dt>
+                    <dt class="col-sm-10">
+                        <input type="hidden" id="recordID" value="0" />
+                        <input type="text" placeholder="User Group Code" required="" id="UserGroupCode" class="form-control">
+                    </dt>
+                    <dt class="col-sm-2">
+                        Name
+                    </dt>
+                    <dt class="col-sm-10">
+                        <input type="text" placeholder="User Group Name" required="" id="UserGroupName" class="form-control">
+                    </dt>
+                    <dt class="col-sm-2">
+                        Details
+                    </dt>
+                    <dt class="col-sm-10">
+                        <input type="text" placeholder="User Group Details" required="" id="ToolTipDetails" class="form-control">
+                    </dt>
+                </dl>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismis="modal">Cancel</button>
+                <a class="btn btn-primary" onclick="Save()">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<button type="button" onclick="showToast()" class="btn btn-primary"  id="liveToastBtn">Show live toast</button>
+    <div id="liveToast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+        <div class="toast-header">
+            <svg class="bd-placeholder-img rounded mr-2" width="20" height="20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#007aff"></rect></svg>
+            <strong class="mr-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>*@
+
+<script src="~/js/PageScripts/UserGroupPageScripts.js"></script>

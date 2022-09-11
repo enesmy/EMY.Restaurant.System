@@ -1,0 +1,136 @@
+﻿@using EMY.Restaurant.Infrastructure.Persistence
+<footer>
+    <div class="frame black"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                <div class="footer_wp">
+                    <i class="icon_pin_alt"></i>
+                    <h3>Adresse</h3>
+                    <p>@Html.Raw(@HomePageConfiguration.Adress)</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                <div class="footer_wp">
+                    <i class="icon_tag_alt"></i>
+                    <h3>Reservierung</h3>
+                    <p><a href="tel:@Html.Raw(@HomePageConfiguration.PhoneNumber)">@Html.Raw(@HomePageConfiguration.PhoneNumber)</a><br><a href="mailto:@Html.Raw(@HomePageConfiguration.Email)">@Html.Raw(@HomePageConfiguration.Email)</a></p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                <div class="footer_wp">
+                    <i class="icon_clock_alt"></i>
+                    <h3>Öffnungszeiten</h3>
+                    <ul>
+                        <li>@Html.Raw(@HomePageConfiguration.OpenHours)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                <h3>den Kontakt halten</h3>
+                <div id="newsletter">
+                    <div id="message-newsletter"></div>
+                    <div name="newsletter_form" id="newsletter_form">
+                        <div class="form-group">
+                            <input type="email" name="email_newsletter" id="emailadress" class="form-control" placeholder="Your email">
+                            <button id="submit-newsletter" onclick="sendMail()"><i class="arrow_carrot-right"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <iframe style="height: 550px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Bahnhofstra%C3%9Fe%204%2C%2049393%20Lohne%20%28Oldenburg%29&amp;t=m&amp;z=14&amp;output=embed&amp;iwloc=near" aria-label="Bahnhofstraße 4, 49393 Lohne (Oldenburg)"></iframe>
+        </div>
+        <!-- /row-->
+        <hr>
+        <div class="row">
+            <div class="col-sm-5">
+                <p class="copy">
+                    © Papel Lounge
+                    - <a style="cursor:pointer;" onclick=" $('#Impressummodel').modal('show');">Impressum</a>
+                    - <a style="cursor:pointer;" onclick=" $('#Datenschutzerklarungmodel').modal('show');">Datenschutz</a>
+                </p>
+            </div>
+            <div class="col-sm-7">
+                <div class="follow_us">
+                    <ul>
+                    @*    <li><a href="#0"><img src="/Themes/FooresRestaurant/img/twitter_icon.svg" 
+                            data-src="/Themes/FooresRestaurant/img/twitter_icon.svg" alt="" class="lazy loaded" 
+                            data-was-processed="true"></a></li>*@
+                        <li><a href="@Html.Raw(@HomePageConfiguration.FaceBook)" target="_blank"><img src="/Themes/FooresRestaurant/img/facebook_icon.svg" data-src="/Themes/FooresRestaurant/img/facebook_icon.svg" alt="" class="lazy loaded" data-was-processed="true"></a></li>
+                        <li><a href="@Html.Raw(@HomePageConfiguration.Instagram)" target="_blank"><img src="/Themes/FooresRestaurant/img/instagram_icon.svg" data-src="/Themes/FooresRestaurant/img/instagram_icon.svg" alt="" class="lazy loaded" data-was-processed="true"></a></li>
+                        <li><a href="@Html.Raw(@HomePageConfiguration.Youtube)" target="_blank"><img src="/Themes/FooresRestaurant/img/youtube_icon.svg" data-src="/Themes/FooresRestaurant/img/youtube_icon.svg" alt="" class="lazy loaded" data-was-processed="true"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="text-center"></p>
+    </div>
+
+    <div class="modal fade" id="Impressummodel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="z-index:100000;"
+         role="dialog" aria-labelledby="ImpressumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="ImpressumModalLabel">Impressum</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="ImpressumModalContent">
+                   @Html.Raw(@HomePageConfiguration.Impressum)
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" id="modalClose" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Datenschutzerklarungmodel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" style="z-index:100000;"
+         role="dialog" aria-labelledby="DatenschutzerklarungModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="DatenschutzerklarungModalLabel">Datenschutzerklärung</h4>
+                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-black" id="DatenschutzerklarungModalContent">
+                        @Html.Raw(@HomePageConfiguration.Datenschutz)                  
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" id="modalClose" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMail() {
+            var mail = document.getElementById("emailadress").value;
+
+            MessageBox.AjaxPost(
+                '/Admin/AddMailList',
+                {
+                    __RequestVerificationToken: gettoken(),
+                    email: mail
+                },
+                function(data) {
+                    MessageBox.ShowMessage('We added your email adres!');
+                    document.getElementById("emailadress").value = '';
+                },
+                function(data) {
+                    MessageBox.Show('Error!', data.responseText)
+                }
+            );
+
+        }
+        function gettoken() {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
+
+    </script>
+
+</footer>

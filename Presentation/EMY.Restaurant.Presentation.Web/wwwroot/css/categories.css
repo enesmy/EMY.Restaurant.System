@@ -1,0 +1,252 @@
+﻿
+
+.month-specials {
+    padding: 3.125rem 0
+}
+
+    .month-specials .specials-content {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap
+    }
+
+@media print, screen and (min-width: 40em) {
+    .month-specials .specials-content {
+        padding-bottom: 3.125rem
+    }
+}
+
+.month-specials .specials-content .special {
+   
+    display: -ms-flexbox;
+    display: flex;
+    transition: .3s ease-in-out
+}
+
+@media print, screen and (min-width: 40em) {
+    .month-specials .specials-content .special {
+        width: 50%
+    }
+}
+
+@media print, screen and (min-width: 64em) {
+    .month-specials .specials-content .special {
+        width: 33.33333%
+    }
+}
+
+.month-specials .specials-content .special:hover {
+    background: #978667;
+    color: white;
+    opacity: 1
+}
+
+    .month-specials .specials-content .special:hover > .special-img img {
+        background: #978667;
+        color: white;
+        opacity: .7
+    }
+
+.month-specials .specials-content .special .special-img {
+    width: 50%
+}
+
+    .month-specials .specials-content .special .special-img img {
+        width: 100%;
+        height: auto;
+        transition: .3s ease-in-out
+    }
+
+.month-specials .specials-content .special .special-items {
+    width: 50%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-left: .625rem;
+    padding-right: .625rem;
+    text-align: center;
+    transition: .3s ease-in-out
+}
+
+    .month-specials .specials-content .special .special-items h2 {
+        font-size: 1rem;
+        position: relative;
+        margin-bottom: .9375rem;
+        font-weight: 600
+    }
+
+        .month-specials .specials-content .special .special-items h2:after {
+            content: '';
+            position: absolute;
+            display: block;
+            bottom: -.5rem;
+            left: 50%;
+            -ms-transform: translateX(-50%);
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 45%;
+            height: 1px;
+            background-color: #978667
+        }
+
+    .month-specials .specials-content .special .special-items p {
+        font-size: .75rem;
+        margin-bottom: .3125rem
+    }
+
+@media print, screen and (min-width: 40em) {
+    .month-specials .specials-content .special .special-items p {
+        font-size: .875rem
+    }
+}
+
+.month-specials .specials-content .special .special-items span {
+    font-weight: 600
+}
+
+@media screen and (min-width: 63.9375em) {
+    /*3 lü*/
+    .img-01, .img-02, .img-03,
+    .img-07, .img-08, .img-09,
+    .img-13, .img-14, .img-15,
+    .img-19, .img-20, .img-21,
+    .img-25, .img-26, .img-27,
+    .img-31, .img-32, .img-33,
+    .img-37, .img-38, .img-39 {
+        order: 1 !important;
+    }
+
+    .img-04, .img-05, .img-06,
+    .img-10, .img-11, .img-12,
+    .img-16, .img-17, .img-18,
+    .img-22, .img-23, .img-24,
+    .img-28, .img-29, .img-30,
+    .img-34, .img-35, .img-36,
+    .img-40, .img-41, .img-42 {
+        order: 0 !important;
+    }
+
+    .spec-01, .spec-02, .spec-03,
+    .spec-07, .spec-08, .spec-09,
+    .spec-13, .spec-14, .spec-15,
+    .spec-19, .spec-20, .spec-21,
+    .spec-25, .spec-26, .spec-27,
+    .spec-31, .spec-32, .spec-33,
+    .spec-37, .spec-38, .spec-39 {
+        order: 0 !important;
+    }
+
+    .spec-04, .spec-05, .spec-06,
+    .spec-10, .spec-11, .spec-12,
+    .spec-16, .spec-17, .spec-18,
+    .spec-22, .spec-23, .spec-24,
+    .spec-28, .spec-29, .spec-30,
+    .spec-34, .spec-35, .spec-36,
+    .spec-40, .spec-41, .spec-42 {
+        order: 1 !important;
+    }
+}
+
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+    /*2 li*/
+    .img-01, .img-02,
+    .img-05, .img-06,
+    .img-09, .img-10,
+    .img-13, .img-14,
+    .img-17, .img-18,
+    .img-21, .img-22,
+    .img-25, .img-26,
+    .img-29, .img-30,
+    .img-33, .img-34,
+    .img-37, .img-38,
+    .img-41, .img-42 {
+        order: 1 !important;
+    }
+
+    .img-03, .img-04,
+    .img-07, .img-08,
+    .img-11, .img-12,
+    .img-15, .img-16,
+    .img-19, .img-20,
+    .img-23, .img-24,
+    .img-27, .img-28,
+    .img-31, .img-32,
+    .img-35, .img-36,
+    .img-39, .img-40 {
+        order: 0 !important;
+    }
+
+    .spec-01, .spec-02,
+    .spec-05, .spec-06,
+    .spec-09, .spec-10,
+    .spec-13, .spec-14,
+    .spec-17, .spec-18,
+    .spec-21, .spec-22,
+    .spec-25, .spec-26,
+    .spec-29, .spec-30,
+    .spec-33, .spec-34,
+    .spec-37, .spec-38,
+    .spec-41, .spec-42 {
+        order: 0 !important;
+    }
+
+    .spec-03, .spec-04,
+    .spec-07, .spec-08,
+    .spec-11, .spec-12,
+    .spec-15, .spec-16,
+    .spec-19, .spec-20,
+    .spec-23, .spec-24,
+    .spec-27, .spec-28,
+    .spec-31, .spec-32,
+    .spec-35, .spec-36,
+    .spec-39, .spec-40 {
+        order: 1 !important;
+    }
+}
+
+@media screen and (min-width: 0em) and (max-width: 40em) {
+    /*1 li*/
+    .img-01, .img-03, .img-05,
+    .img-07, .img-09, .img-11,
+    .img-13, .img-15, .img-17,
+    .img-19, .img-21, .img-23,
+    .img-25, .img-27, .img-29,
+    .img-31, .img-33, .img-35,
+    .img-37, .img-39, .img-41 {
+        order: 1 !important;
+    }
+
+    .img-02, .img-04, .img-06,
+    .img-08, .img-10, .img-12,
+    .img-14, .img-16, .img-18,
+    .img-20, .img-22, .img-24,
+    .img-26, .img-28, .img-30,
+    .img-32, .img-34, .img-36,
+    .img-38, .img-40, .img-42 {
+        order: 0 !important;
+    }
+
+    .spec-01, .spec-03, .spec-05,
+    .spec-07, .spec-09, .spec-11,
+    .spec-13, .spec-15, .spec-17,
+    .spec-19, .spec-21, .spec-23,
+    .spec-25, .spec-27, .spec-29,
+    .spec-31, .spec-33, .spec-35,
+    .spec-37, .spec-39, .spec-41 {
+        order: 0 !important;
+    }
+
+    .spec-02, .spec-04, .spec-06,
+    .spec-08, .spec-10, .spec-12,
+    .spec-14, .spec-16, .spec-18,
+    .spec-20, .spec-22, .spec-24,
+    .spec-26, .spec-28, .spec-30,
+    .spec-32, .spec-34, .spec-36,
+    .spec-38, .spec-40, .spec-42 {
+        order: 1 !important;
+    }
+}

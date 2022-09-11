@@ -1,0 +1,149 @@
+﻿@using EMY.Restaurant.Core.Domain.Entities
+
+@model List<Order>
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">Orders</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center justify-content-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="width:10px;">&nbsp;</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order Number</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Owner</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Percent</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td class="align-middle" style="width:10px;">
+                                            @if (order.DestinationTime == null || !order.DestinationTime.HasValue)
+                                            {
+                                                <input type="datetime-local" id="@order.OrderID" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")" value="@DateTime.Now.AddMinutes(30).ToString("yyyy-MM-ddTHH:mm:ss")">
+                                                <a class="btn btn-link text-secondary mb-0" href="#0" onclick="setTimeToOrder('@order.OrderID')">
+                                                    <i style="color:red;" class="fas fa-clock" area-hidden="true"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-link text-secondary mb-0" asp-controller="Admin" asp-action="OrderDetails" asp-route-id="@order.OrderID" target="_blank">
+                                                    <i style="color:lime;" class="fas fa-plus" area-hidden="true"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                        <td>
+                                            @order.OrderNumber
+                                        </td>
+                                        <td>
+                                            <div class="d-flex px-2">
+                                                <div class="my-auto">
+                                                    <h6 class="mb-0 text-sm">@order.FullName</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-sm font-weight-bold mb-0">@order.AfterDiscountPrice</p>
+                                        </td>
+                                        <td>
+                                            <span class="text-xs font-weight-bold">@order.OrderStatus.ToString()</span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div>
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="@order.GetPercent()" aria-valuemin="0" aria-valuemax="100" style="width: @order.GetPercent()%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const months = {
+        0: 'January',
+        1: 'February',
+        2: 'March',
+        3: 'April',
+        4: 'May',
+        5: 'June',
+        6: 'July',
+        7: 'August',
+        8: 'September',
+        9: 'October',
+        10: 'November',
+        11: 'December'
+    }
+    const days = [
+        'Sun',
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat'
+    ]
+
+
+    function setTimeToOrder(orderID) {
+        var time = new Date($('input[type="datetime-local"]').val())
+
+        const dayIndex = time.getDay()
+        const dayName = days[dayIndex]
+
+        const monthIndex = time.getMonth()
+        const date = time.getDate();
+        const year = time.getFullYear();
+
+        const monthName = months[monthIndex]
+
+        const formatted = `${dayName}, ${date} ${monthName} ${year} ${doubleCharacter(time.getHours())}:${doubleCharacter(time.getMinutes())}`
+
+        MessageBox.AskYesNoHtml('Set Time!', "Are you sure you want to set the time to <b>" + formatted + "</b>?", function() {
+            $.ajax({
+                type: "POST",
+                url: "/Admin/SetTimeToOrder",
+                data: {
+                    orderID: orderID,
+                    time: time
+                },
+                success: function(data) {
+                    location.reload();
+                },
+                error: function(data) {
+                    MessageBox.Show("Error", data.responseText);
+                }
+            });
+        });
+    }
+
+    function doubleCharacter(character) {
+        return ('0' + character).slice(-2);
+    }
+</script>

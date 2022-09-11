@@ -1,0 +1,178 @@
+﻿@using EMY.Restaurant.Core.Domain.ViewModels;
+@model ReservationPageResultViewModel;
+@{
+    ViewData["Title"] = "Reservations";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+
+}
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-5">
+            <div class="form-group">
+                <label asp-for="Begin" class="control-label"></label>
+                <input asp-for="Begin" type="datetime-local" class="form-control bg-white" />
+                <span asp-validation-for="Begin" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label asp-for="End" class="control-label"></label>
+                <input asp-for="End" type="datetime-local" class="form-control bg-white" />
+                <span asp-validation-for="End" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <input class="btn btn-success btn-sm" type="submit" value="Search">
+</form>
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-pending-tab" data-bs-toggle="tab" data-bs-target="#nav-pending" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Pendings</button>
+        <button class="nav-link" id="nav-authorized-tab" data-bs-toggle="tab" data-bs-target="#nav-authorized" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Authorized</button>
+        <button class="nav-link" id="nav-unauthorized-tab" data-bs-toggle="tab" data-bs-target="#nav-unauthorized" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Unauthorized</button>
+    </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-pending" role="tabpanel" aria-labelledby="nav-home-tab">
+        <table class="table table-hover table-responsive-lg">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Number Of People</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Pendings)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem =>item.Date)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Phone)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.NumberOfPeople)</td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="ChangeStatus(2,'@item.ReservationID')">Accept</button>
+                            <button class="btn-sm btn-danger" onclick="ChangeStatus(3,'@item.ReservationID')">Reject</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+    <div class="tab-pane fade" id="nav-authorized" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <table class="table table-hover table-responsive-lg">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Number Of People</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AuthorizedReservations)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem =>item.Date)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Phone)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.NumberOfPeople)</td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="ChangeStatus(4,'@item.ReservationID')">Complated!</button>
+                            <button class="btn-sm btn-danger" onclick="ChangeStatus(5,'@item.ReservationID')">Did not come!</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="nav-unauthorized" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <table class="table table-hover table-responsive-lg">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Number Of People</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.UnAuthorizedReservations)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem =>item.Date)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.Phone)</td>
+                        <td>@Html.DisplayFor(modelItem =>item.NumberOfPeople)</td>
+                        <td>
+                            <button class="btn-sm btn-primary" onclick="ChangeStatus(1,'@item.ReservationID')">Send to Pendings!</button>
+                            <button class="btn-sm btn-danger" onclick="ChangeStatus(2,'@item.ReservationID')">Confirm!</button>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function ChangeStatus(status, reservationid) {
+        QuestionMessage = "";
+
+        switch (status) {
+
+            case 1:
+                QuestionMessage = "Are you sure you want to send this reservation to authorized?";
+                break;
+            case 2:
+                QuestionMessage = "Are you sure you want to confirm this reservation?";
+                break;
+            case 3:
+                QuestionMessage = "Are you sure you want to reject this reservation?";
+                break;
+            case 4:
+                QuestionMessage = "Are you sure you want to complated this reservation?";
+                break;
+            case 5:
+                QuestionMessage = "Are you sure they did not come for this reservation?";
+                break;
+        }
+
+
+        MessageBox.AskYesNo('Status', QuestionMessage,
+            function() {
+                $.ajax({
+                    url: '/Admin/SetReservationStatusSettings',
+                    type: 'POST',
+                    data:
+                    {
+                        status: status,
+                        reservationid: reservationid
+                    },
+                    success: function(data) {
+                        location.reload();
+                    },
+                    error: function(data) {
+                        MessageBox.ShowMessage('Error:' + data.responseText);
+                    }
+                })
+            }
+            , null);
+    }
+</script>
