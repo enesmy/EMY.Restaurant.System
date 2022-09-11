@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Aufträge";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+}
+<link href="/Themes/FooresRestaurant/css/shop.css" rel="stylesheet">
+<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)"
+     style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <h1>Aufträge</h1>
+                    <p>Essen nach Hause liefern lassen oder mitnehmen</p>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame gray"></div>
+</div>
+<div class="bg_gray">
+    <div class="container margin_60_40">
+        <table class="table table-striped cart-list">
+            <thead>
+                <tr>
+                    <th>
+                        Essen
+                    </th>
+                    <th>
+                        Preis
+                    </th>
+                    <th>
+                        Menge
+                    </th>
+                    <th>
+                        Zwischensumme
+                    </th>
+                    <th>&nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tbdy">
+            </tbody>
+        </table>
+
+        <!-- /cart_actions -->
+    </div>
+    <!-- /container -->
+</div>
+<div class="box_cart">
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-xl-4 col-lg-4 col-md-6">
+                <ul>
+                    <li>
+                        <span>Zwischensumme</span>  <b id="summarysubtotal"></b>
+                    </li>
+                    <li>
+                        <span>Gesamt</span> <b id="summarytotalprice"></b>
+                    </li>
+                </ul>
+                <a asp-action="CheckOut" asp-controller="Home" class="btn_1 full-width cart">Zur Kasse</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /box_cart -->
+
+
+<script>
+    shopcardflag = true;
+</script>
+<script src="/Themes/FooresRestaurant/js/specific_shop.js"></script>

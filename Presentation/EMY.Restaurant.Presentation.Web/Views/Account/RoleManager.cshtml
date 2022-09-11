@@ -1,0 +1,131 @@
+﻿@using EMY.Restaurant.Core.Domain.Common
+@using EMY.Restaurant.Core.Domain.Entities;
+@model IList<UserGroupRole>
+@{
+    ViewData["Title"] = "User Group Authorizes";
+     Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+    string[] FormList = (string[])Enum.GetNames(typeof(Forms));
+}
+
+
+<h1>User Group Authorizes</h1>
+
+
+<table id="checkboxes" class="table table-hover table-responsive-sm">
+    <thead class="thead-dark">
+        <tr>
+            <th colspan="8">Authorize List - @ViewBag.UserGroup</th>
+        </tr>
+        <tr> <th colspan="8">@ViewBag.ToolTip</th></tr>
+        <tr>
+            <th>
+                Form Name
+            </th>
+            <th>
+                Read
+            </th>
+            <th>
+                Add
+            </th>
+            <th>
+                Delete
+            </th>
+            <th>
+                Update
+            </th>
+            <th>
+                All
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var formName in FormList)
+        {
+            <tr>
+                <td>@formName</td>
+                <td>
+                    <input onchange="changedRole(this.id);" data-formname='@formName' data-authtype="1" type="checkbox" id='@Html.Raw(formName+"Read")'
+                       class="form-check-input" @Html.Raw(Model.Count(o => o.FormName == formName && o.AuthorizeType == AuthType.Read && !o.IsDeleted) > 0 ? "checked='checked'" : "") />
+                    <label class="form-check-label" for='@Html.Raw(formName+"Read")'>
+                        Show
+                    </label>
+                </td>
+                <td>
+                    <input onchange="changedRole(this.id);" data-formname='@formName' data-authtype="2" type="checkbox" id='@Html.Raw(formName+"Write")'
+                       class="form-check-input" @Html.Raw(Model.Count(o => o.FormName == formName && o.AuthorizeType == AuthType.Write && !o.IsDeleted) > 0 ? "checked='checked'" : "") />
+                    <label class="form-check-label" for='@Html.Raw(formName+"Write")'>
+                        Add
+                    </label>
+                </td>
+                <td>
+                    <input onchange="changedRole(this.id);" data-formname='@formName' data-authtype="3" type="checkbox" id='@Html.Raw(formName+"Delete")'
+                       class="form-check-input" @Html.Raw(Model.Count(o => o.FormName == formName && o.AuthorizeType == AuthType.Delete && !o.IsDeleted) > 0 ? "checked='checked'" : "") />
+                    <label class="form-check-label" for='@Html.Raw(formName+"Delete")'>
+                        Delete
+                    </label>
+                </td>
+                <td>
+                    <input onchange="changedRole(this.id);" data-formname='@formName' data-authtype="4" type="checkbox" id='@Html.Raw(formName+"Update")'
+                       class="form-check-input" @Html.Raw(Model.Count(o => o.FormName == formName && o.AuthorizeType == AuthType.Update && !o.IsDeleted) > 0 ? "checked='checked'" : "") />
+                    <label class="form-check-label" for='@Html.Raw(formName+"Update")'>
+                        Update
+                    </label>
+                </td>
+                <td>
+                    <input onchange="changedRole(this.id);" data-formname="@formName" data-authtype="5" type="checkbox" id='@Html.Raw(formName+"Full")'
+                       class="form-check-input" @Html.Raw(Model.Count(o => o.FormName == formName && o.AuthorizeType == AuthType.Full && !o.IsDeleted) > 0 ? "checked='checked'" : "") />
+                    <label class="form-check-label" for='@Html.Raw(formName+"Full")'>
+                        Full
+                    </label>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+<script>
+    function changedRole(id) {
+        var result = document.getElementById(id).checked;
+        var userID =@Html.Raw("'"+ViewBag.UserGroupID+"'");
+        const obj = document.querySelector('#' + id);
+        if (result) {
+            checked(obj.dataset.formname, obj.dataset.authtype, userID, 'AddRole');
+        }
+        else {
+            checked(obj.dataset.formname, obj.dataset.authtype, userID, 'DeleteRole');
+        }
+    }
+    function checked(formName, roleType, uid, method) {
+        $.ajax({
+            url: "/Account/" + method,
+            type: "POST",
+            data:
+            {
+                UserGroupID: uid,
+                FormName: formName,
+                rollType: roleType
+            },
+            success: function(data) {
+                console.log(data);
+            }, error: function(xhr, ajaxOptions, thrownError) {
+                console.log(xhr);
+            }
+        });
+    }
+
+    function getParams(url) {
+        var params = {};
+        var parser = document.createElement('a');
+        parser.href = url;
+        var query = parser.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            params[pair[0]] = decodeURIComponent(pair[1]);
+        }
+        return params;
+    }
+</script>

@@ -1,0 +1,75 @@
+﻿@model EMY.Restaurant.Core.Domain.Entities.MenuCategory
+
+@{
+    ViewData["Title"] = "Speisekarte";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+    int Today = (int)DateTime.Now.DayOfWeek;
+    if (Today == 0) Today = 7;
+}
+
+
+
+<div class="hero_single inner_pages background-image" data-background="url(/Uploads/Photos/@Model.HeaderPhotoURL)" style="background-image: url(&quot;/Uploads/Photos/@Model.HeaderPhotoURL&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <h1>@Model.Name</h1>
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame white"></div>
+</div>
+<!-- /hero_single -->
+
+<div class="pattern_2">
+    <div class="container margin_60_40" data-cues="slideInUp" data-disabled="true">
+
+        <div class="row add_bottom_45 menu-gallery" data-cue="slideInUp" data-show="true"
+             style="animation-name: slideInUp; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;">
+
+            @foreach (var item in Model.Menus.Where(o => !o.IsDeleted))
+            {
+                <div class="col-lg-6" data-cue="slideInUp">
+                    <div class="menu_item order">
+                        <figure>
+                            <a href="/Uploads/Photos/@item.PhotoFileName" title="@item.Name" data-effect="mfp-zoom-in">
+                                <img src="/Uploads/Photos/@item.PhotoThumbFileName"
+                                 data-src="/Uploads/Photos/@item.PhotoThumbFileName" class="lazy" alt="@item.Name">
+                            </a>
+                        </figure>
+                        <div class="menu_title">
+                            <h3>(@item.Code) @item.Name</h3><em>
+                                @if ((int)item.DayOfWeek == Today)
+                                {
+                                    <del style="color:red;">@item.Price</del> @item.DayOfWeekPrice
+
+                                }
+                                else
+                                {
+                                    @item.Price.ToString()
+                                }
+                                €
+                            </em>
+                        </div>
+                        <p>@item.Description</p>
+                        <a style="cursor:pointer;" onclick="addToBasket('@item.MenuID', '@item.Code', '@item.Name', '@((int)item.DayOfWeek == Today? item.DayOfWeekPrice:item.Price)', '@item.PhotoThumbFileName'); loadHeaderOrder();" class="add_to_cart">Add To Cart</a>
+                    </div>
+                </div>
+
+
+
+
+                
+            }
+
+        </div>
+
+
+    </div>
+    <!-- /container -->
+</div>
+<!-- /pattern_2 -->

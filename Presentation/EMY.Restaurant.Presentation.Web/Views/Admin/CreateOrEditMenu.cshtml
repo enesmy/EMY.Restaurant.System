@@ -1,0 +1,51 @@
+﻿@model EMY.Restaurant.Core.Domain.Entities.Menu
+@using EMY.Restaurant.Core.Domain.Common
+<h4>Menu</h4>
+<hr />
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input type="hidden" asp-for="MenuID" />
+<input type="hidden" asp-for="MenuCategoryID" />
+
+<div class="form-group">
+    <label asp-for="Code" class="control-label"></label>
+    <input asp-for="Code" style="padding-left:10px;" class="form-control bg-dark text-light" />
+    <span asp-validation-for="Code" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Name" class="control-label"></label>
+    <input asp-for="Name" style="padding-left:10px;" class="form-control bg-dark text-light" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Description" class="control-label"></label>
+    <input asp-for="Description" style="padding-left:10px;" class="form-control bg-dark text-light" />
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label class="control-label">Photo</label>
+    <input id="photoContent" name="photoContent" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="form-control bg-info text-light" />
+</div>
+<div class="form-group">
+    <label asp-for="Price" class="control-label"></label>
+    @Html.EditorFor(modelItem => Model.Price, 
+        new { htmlAttributes = new { @class = "form-control bg-dark text-light", type="number", style="padding-left:10px;", step="0.01" } })
+    <span asp-validation-for="Price" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="DayOfWeek" class="control-label">Day of week</label>
+    @Html.DropDownListFor(modelItem => Model.DayOfWeek, new SelectList(Html.GetEnumSelectList(typeof(DayOfWeekOption)), "Value", "Text"),
+    htmlAttributes: new { @class = "form-control bg-dark text-light", style="padding-left:10px;" })
+    <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="DayOfWeekPrice" class="control-label">Day of week Price</label>
+    @*<input type="number" style="padding-left:10px;" step="0.01" asp-for="DayOfWeekPrice" class="form-control bg-dark text-light" />*@
+    @Html.EditorFor(modelItem => Model.DayOfWeekPrice,
+    new { htmlAttributes = new { @class = "form-control bg-dark text-light", type="number", style="padding-left:10px;", step="0.01"} })
+    <span asp-validation-for="DayOfWeekPrice" class="text-danger"></span>
+</div>
+
+<script>
+    cleanPage();
+</script>

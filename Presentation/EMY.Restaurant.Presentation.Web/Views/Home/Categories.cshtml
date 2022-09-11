@@ -1,0 +1,59 @@
+﻿@using EMY.Restaurant.Core.Application.Repositories.MenuCategoryRepositories
+@using EMY.Restaurant.Infrastructure.Persistence
+@using EMY.Restaurant.Infrastructure.Persistence.Repositories.MenuCategoryRepositories
+@using Microsoft.EntityFrameworkCore
+@inject IDatabaseFactory database;
+
+@{
+    ViewData["Title"] = "Kategorien";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+    var Categories = database.MenuCategoryRead.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.Menus.Count > 0).ToList();
+    int counter = 0;
+}
+
+<link href="/css/categories.css" rel="stylesheet">
+
+<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <h1>Kategorien</h1>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame white"></div>
+</div>
+<!-- /hero_single -->
+
+<section id="specials-grid" class="month-specials" data-scroll-reveal="enter from the bottom after 0.9s">
+    <div class="container">
+        <div class="specials-content">
+
+            @foreach (var category in Categories)
+            {
+                counter = counter + 1;
+                <a asp-controller="Home" asp-action="Menu" asp-route-categoryname='@category.Name' asp-route-categoryid="@category.MenuCategoryID" class="special">
+                    <div class="@Html.Raw("special-items spec-0"+counter)">
+                        <h2 class="scroll-reveal" data-origin="top" data-distance="20%">@category.Name</h2>
+                        <p class="scroll-reveal" data-origin="bottom" data-distance="30%">@category.Description</p>
+                    </div>
+                    <div class="@Html.Raw("special-img img-0"+counter)">
+                        <img src="/Uploads/Photos/@category.LogoPhotoURL" />
+                    </div>
+                </a>
+                <!--.special-->
+                counter = counter == 6 ? 0 : counter;
+
+            }
+
+
+
+
+        </div>
+        <!--.specials-content-->
+    </div>
+
+</section>

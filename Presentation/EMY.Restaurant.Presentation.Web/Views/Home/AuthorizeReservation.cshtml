@@ -1,0 +1,27 @@
+﻿@using EMY.Restaurant.Core.Domain.Entities
+@{
+    ViewData["Title"] = "Bestätigung";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+}
+
+<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <h1>
+                        Bestätigung
+                        <br />
+                        Liebe @Html.Raw(((Reservation)ViewBag.reservation).Name)
+                        <br />
+                        Ihre Reservierung wurde bestätigt!
+                    </h1>
+                    <hr />
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame white"></div>
+</div>
+<!-- /hero_single -->

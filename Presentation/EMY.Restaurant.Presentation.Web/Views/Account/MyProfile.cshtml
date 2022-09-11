@@ -1,0 +1,111 @@
+﻿@model EMY.Restaurant.Core.Domain.Entities.User
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+}
+<h1>My Profile</h1>
+
+
+<div>
+    <h4>Profile Informations</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            <i class="fas fa-fingerprint"></i>
+        </dt>
+        <dd class="col-sm-10">
+          @Html.DisplayFor(o=> Model.UserID)
+        </dd>
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetFullName()
+        </dd>
+        <dt class="col-sm-2">
+            User Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.UserName
+        </dd>
+    </dl>
+</div>
+
+
+<div>
+    <h4>Change Password</h4>
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Model.HiddenQuestion
+        </dt>
+        <dd class="col-sm-10">
+            <input type="text" placeholder="Hidden Question Answer" min="3" required id="hiddenQuestionAnswer" class="form-control bg-dark text-white" />
+        </dd>
+        <dt class="col-sm-2">
+            New Password
+        </dt>
+        <dd class="col-sm-10">
+            <input type="password" placeholder="New Password" min="3" required id="newPassword" class="form-control bg-dark text-white" />
+        </dd>
+        <dt class="col-sm-2">
+            Password Check
+        </dt>
+        <dd class="col-sm-10">
+            <input type="password" placeholder="Password Check" min="3" required id="PasswordCheck" class="form-control bg-dark text-white" />
+        </dd>
+
+    </dl>
+    <button class="btn  btn-primary" onclick="SaveNewPassword();" type="button" id="btnRun">
+        <i class="fas fa-save"></i> Save Changes
+    </button>
+    <br />
+    <br />
+    <div class="alert alert-danger" id="errorMessage" style="display:none;"></div>
+
+    <div id="general">
+    </div>
+</div>
+<script>
+    function setPasswordConfirmValidity() {
+        const password1 = document.getElementById('newPassword');
+        const password2 = document.getElementById('PasswordCheck');
+        if (password1.value === password2.value) {
+            password2.setCustomValidity('');
+            $("#general").hide();
+            $("#errorMessage").hide();
+            return true;
+        } else {
+            password2.setCustomValidity('Passwords must match!');
+            $("#errorMessage").html('Passwords must match!');
+            $("#errorMessage").show();
+            $("#general").hide();
+            return false;
+        }
+    }
+    function SaveNewPassword() {
+        if (setPasswordConfirmValidity()) {
+            const newPassword = document.getElementById('newPassword').value;
+            const hiddenQuestionAnswer = document.getElementById('hiddenQuestionAnswer').value;
+            $.ajax({
+                url: "/Account/ChangeMyPassword",
+                type: "POST",
+                data:
+                {
+                    newPassword: newPassword,
+                    hiddenQuestionAnswer: hiddenQuestionAnswer
+                },
+                success: function(data) {
+                    $("#errorMessage").hide();
+                    $("#general").html('<div class="alert alert-info" id="FirstResult"><b>' + data + '</b></div>');
+                    $("#general").show();
+                }, error: function(xhr, ajaxOptions, thrownError) {
+                    $("#errorMessage").html(xhr.responseJSON.detail);
+                    $("#errorMessage").show();
+                    $("#general").hide();
+                }
+            });
+        }
+    }
+</script>

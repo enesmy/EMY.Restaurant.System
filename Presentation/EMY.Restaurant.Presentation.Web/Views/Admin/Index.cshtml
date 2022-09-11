@@ -1,0 +1,55 @@
+﻿@using EMY.Restaurant.Core.Domain.ViewModels;
+
+
+@{
+
+
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+
+    int
+    Reservationdifferent = ((ReservationStatsViewModel)ViewBag.ReservationStats).YesterdayReservations - ((ReservationStatsViewModel)ViewBag.ReservationStats).TodayReservations,
+    YesterdayReservation = ((ReservationStatsViewModel)ViewBag.ReservationStats).YesterdayReservations,
+    TodayReservation = ((ReservationStatsViewModel)ViewBag.ReservationStats).TodayReservations,
+    YesterdayPeople = ((ReservationStatsViewModel)ViewBag.ReservationStats).YesterdayReservationPeople,
+    TodayPeople = ((ReservationStatsViewModel)ViewBag.ReservationStats).TodayReservationPeople;
+
+
+}
+
+<div class="row">
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+                <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                    <i class="material-icons opacity-10">person</i>
+                </div>
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize">Today's Reservations</p>
+                    <h4 class="mb-0">@Html.Raw($"{YesterdayReservation} ({YesterdayPeople} Ppl)")</h4>
+                </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0">@Html.Raw($"{Reservationdifferent} {(Reservationdifferent>0?"<span class='text-success text-sm font-weight-bolder'> more </span>than yesterday!":(Reservationdifferent==0?"<span class='text-secondary text-sm font-weight-bolder'> same</span> as yesterday!":"<span class='text-danger text-sm font-weight-bolder'>  less </span>than yesterday!"))}")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card">
+            <div class="card-header p-3 pt-2">
+                <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                    <i class="material-icons opacity-10">person</i>
+                </div>
+                <div class="text-end pt-1">
+                    <p class="text-sm mb-0 text-capitalize">New Mail List</p>
+                    <h4 class="mb-0">3,462</h4>
+                </div>
+            </div>
+            <hr class="dark horizontal my-0">
+            <div class="card-footer p-3">
+                <p class="mb-0"><span class="text-danger text-sm font-weight-bolder">-2%</span> than yesterday</p>
+            </div>
+        </div>
+    </div>
+</div>

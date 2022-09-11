@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Orders - Check Out";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+}
+
+
+<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)"
+     style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <h1>Deine Bestellungen</h1>
+                    <p>eine Bestellung aufgeben</p>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame gray"></div>
+</div>
+
+<div class="container margin_60_40" style="transform: none;">
+    <div class="row justify-content-center" style="transform: none;">
+        <div class="col-xl-6 col-lg-8">
+            <div class="box_booking_2 style_2">
+                <div class="head">
+                    <div class="title">
+                        <h3>Persönliche Daten</h3>
+                    </div>
+                </div>
+                <!-- /head -->
+                <div class="main">
+                    <div class="form-group">
+                        <label>Vor-und Nachname</label>
+                        <input id="fullName" class="form-control" placeholder="First and Last Name">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>E-Mail-Addresse</label>
+                                <input id="email" class="form-control" placeholder="Email Address">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input id="phone" class="form-control" placeholder="Phone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Vollständige Adresse</label>
+                        <input id='fullAdress' class="form-control" placeholder="Full Address">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Stadt</label>
+                                <input id='city' class="form-control" placeholder="City">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Postleitzahl</label>
+                                <input id='postalCode' class="form-control" placeholder="0123">
+                            </div>
+                        </div>
+                    </div>
+                      <div class="form-group">
+                        <label>Anmerkungen</label>
+                        <textarea id="notes" rows="4" cols="50" class="form-control" style="height:150px !important;" placeholder="Notes"></textarea>
+                    </div>
+                </div>
+            </div>
+            <!-- /box_booking -->
+            <div class="box_booking_2 style_2">
+                <div class="head">
+                    <div class="title">
+                        <h3>Zahlungsmethode</h3>
+                    </div>
+                </div>
+                <!-- /head -->
+                <div class="main">
+                    <div class="payment_select">
+                        <label class="container_radio">
+                            Bei Lieferung im Restaurant zu bezahlen
+                            <input type="radio" value="Cash" checked="" name="payment_method">
+                            <span class="checkmark"></span>
+                        </label>
+                        <i class="icon_wallet"></i>
+                    </div>
+                  
+                </div>
+            </div>
+            <!-- /box_booking -->
+        </div>
+        <!-- /col -->
+        <div class="col-xl-4 col-lg-4" id="sidebar_fixed" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            <!-- /box_booking -->
+            <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
+                <div class="box_booking">
+                    <div class="head">
+                        <h3>Bestellübersicht</h3>
+                    </div>
+                    <!-- /head -->
+                    <div class="main">
+                        <ul id='checkoutList' class="clearfix">
+                        </ul>
+
+                        <ul class="clearfix">
+                            <li>Zwischensumme<span id='summarySubtotal'>$56</span></li>
+                            <li class="total">Gesamt<span id='summaryTotal'>$66</span></li>
+                        </ul>
+                        <a id="btnConfirm" href="#0" onclick="confirmOrder();" class="btn_1 full-width mb_5">Jetzt bestellen</a>
+                        <div class="text-center"><small>oder Rufen Sie uns an unter <a href="tel:004944429479642" target="_blank">0 4442 94 79 642</a></small></div>
+                    </div>
+                </div><div class="resize-sensor" style="position: absolute; inset: 0px; overflow: hidden; z-index: -1; visibility: hidden;"><div class="resize-sensor-expand" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 437px; height: 1108px;"></div></div><div class="resize-sensor-shrink" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;"><div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div></div></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /row -->
+</div>
+
+
+<script>
+    checkoutflag = true;
+</script>

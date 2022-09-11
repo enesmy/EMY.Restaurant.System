@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    @await Component.InvokeAsync("Header")
+    @await Component.InvokeAsync("CssFiles")
+
+</head>
+
+<body>
+<script>
+    var shopcardflag = false;
+    var checkoutflag = false;
+
+</script>
+
+    <div id="preloader">
+        <div data-loader="circle-side"></div>
+    </div><!-- /Page Preload -->
+
+    <header class="header clearfix element_to_stick">
+        <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
+        <div class="container-fluid">
+            <div id="logo">
+                <a href="/">
+                    <img src="/img/Logo/papel-white-icon.png"  height="35" alt="" class="logo_normal">
+                    <img src="/img/Logo/papel-black-icon.png"  height="35" alt="" class="logo_sticky">
+                </a>
+            </div>
+
+            <!-- /top_menu -->
+            <a href="#0" class="open_close">
+                <i class="icon_menu"></i><span>Menu</span>
+            </a>
+
+            @(await Component.InvokeAsync("Navbar"))
+        </div>
+        <!-- Search -->
+        <div class="search-overlay-menu">
+            <span class="search-overlay-close"><span class="closebt"><i class="icon_close"></i></span></span>
+            <form asp-action="Search" asp-controller="Home" role="search" id="searchform" method="get">
+                <input value="" name="q" type="search" placeholder="Suche..." />
+                <button type="submit"><i class="icon_search"></i></button>
+            </form>
+        </div><!-- End Search -->
+    </header>
+    <!-- /header -->
+
+    <main>
+
+        @RenderBody();
+
+    </main>
+    <!-- /main -->
+    <!-- Footer -->
+    @await Component.InvokeAsync("Footer")
+    <!--/footer-->
+
+    <div id="toTop"></div><!-- Back to top button -->
+  
+
+   
+
+    <div class="modal fade" id="MessageboxModal" data-bs-backdrop='static' data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="messageboxModalLabel" aria-modal="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="messageboxModalLabel">header</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageboxModalContent">
+                  content
+                </div>
+                
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" onclick="MessageBox.saveClicked()" id="modalSave" data-bs-dismiss="modal">Save</button>
+                    <button class="btn btn-success" type="button" onclick="MessageBox.yesClicked()" id="modalYes" data-bs-dismiss="modal">Yes</button>
+                    <button class="btn btn-danger" type="button" onclick="MessageBox.noClicked()" id="modalNo" data-bs-dismiss="modal">No</button>
+                    <button class="btn btn-secondary" type="button" onclick="MessageBox.clear()" id="modalClose" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- /.modal -->
+    @await Component.InvokeAsync("JsFiles")
+
+</body>
+</html>

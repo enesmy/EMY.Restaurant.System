@@ -1,0 +1,8 @@
+{
+  "DisplayName": "EMY Restaurant",
+  "CredentialPassword": "Hello World",
+  "MailAdress": "HelloWorld@gmail.com",
+  "SmtpServer": "smtp.gmail.com",
+  "SmtpPort": 587,
+  "RequireSSL": true
+}

@@ -1,0 +1,151 @@
+﻿@using EMY.Restaurant.Core.Domain.Common
+@using EMY.Restaurant.Core.Domain.Entities
+@model Order
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+}
+
+<div class="card my-4">
+    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Order Details @Model.OrderNumber</h6>
+        </div>
+    </div>
+    <div class="card-body px-0 pb-2">
+        <div class="col-lg-8 mx-5">
+            <div class="card mb-4">
+                <div class="card-header p-3 pb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-sm mb-0"> Order no. <b>@Model.OrderNumber</b> from <b>@Model.CreatedAt.ToString("yyyy.MM.dd HH:mm")</b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-3 pt-0">
+                    <hr class="horizontal dark mt-0 mb-4">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="d-flex">
+
+                                <div>
+                                    <h6 class="text-lg mb-0 mt-2">@Model.FullName</h6>
+                                    <p class="text-sm mb-3">Since @Model.UpdatedAt.ToString("yyyy.MM.dd HH:mm") @Model.OrderStatus.ToString()</p>
+                                    <span class="badge bg-gradient-success badge-sm null null">@Model.OrderStatus.ToString()</span>
+
+                                    @if (Model.OrderStatus == OrderStatus.Ready)
+                                    {
+                                        <br />
+                                        <hr />
+                                        <a href="#0" onclick="DeliverPackage('@Model.OrderID')" class="btn btn-sm btn-primary">Deliver</a>
+                                    }
+                                  
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div>
+
+                                Mail Adress : <a target="_blank" href="@Html.Raw("mailto:"+Model.EmailAdress)">@Model.EmailAdress</a><br />
+                                Phone : <a target="_blank" href="@Html.Raw("tel:"+Model.PhoneNumber)">@Model.PhoneNumber</a><br />
+                                Adress : <a target="_blank" href="@Html.Raw($"https://www.google.com/maps/dir//{Model.FullAdress}, {Model.PostalCode}, {Model.City}")"> <b>@Model.FullAdress, @Model.PostalCode, @Model.City</b></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="horizontal dark mt-4 mb-4">
+                    <div class="row">
+
+                        <div class="col-lg-7 col-md-6 col-12">
+                            <h6 class="mb-3">Order details</h6>
+                            @foreach (var item in Model.OrderItems)
+                            {
+                                <div class="card card-body @Html.Raw((item.IsSuccess ? "bg-success": "")) border card-plain border-radius-lg d-flex align-items-center flex-row">
+
+                                    @Html.Raw($"<h6 class='mb-0 {(item.IsSuccess ? "text-white": "")}'>{item.ItemCount}x {@item.MenuText}</h6>" )
+                                    <div class="mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto">
+                                        <h6 class=" @(item.IsSuccess ? "text-white": "")">@Html.Raw($"-- €{item.ItemPrice} / €{item.TotalPrice}--  ")</h6>
+                                        @if (!item.IsSuccess)
+                                        {
+                                            <button onclick="successOrderItem('@item.OrderItemID')" style="color:lime;" class="btn btn-outline-secondary btn-md btn-icon-only btn-rounded " data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="We do not store card details">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            }
+
+
+                            <h6 class="mb-3 mt-4">Billing Information</h6>
+                            <ul class="list-group">
+                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-3 text-sm">@Model.FullName</h6>
+                                        <span class="mb-2 text-xs"> Adress: <span class="text-dark font-weight-bold ms-2">@Model.FullAdress, @Model.PostalCode, @Model.City</span></span>
+                                        <span class="mb-2 text-xs"> Email Address: <span class="text-dark ms-2 font-weight-bold">@Model.EmailAdress</span></span>
+                                        <span class="text-xs"> Phone Number: <span class="text-dark ms-2 font-weight-bold">@Model.PhoneNumber</span></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 col-12 ms-auto">
+                            <h6 class="mb-3">Order Summary</h6>
+                            <div class="d-flex justify-content-between">
+                                <span class="mb-2 text-sm">Product Price:</span><span class="text-dark font-weight-bold ms-2">€@(Math.Round(Model.AfterDiscountPrice*(decimal)0.8,2))</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <span class="text-sm">Taxes:</span><span class="text-dark ms-2 font-weight-bold">€@(Math.Round(Model.AfterDiscountPrice*(decimal)0.2,2))</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <span class="mb-2 text-lg">Total:</span>
+                                <span class="text-dark text-lg ms-2 font-weight-bold">€@Model.AfterDiscountPrice</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function successOrderItem(id) {
+
+        MessageBox.AskYesNo('Are you sure!', 'Are you sure you finished this order?', function() {
+
+            $.ajax({
+                url: '/Admin/SuccessOrderItem',
+                data: { id: id },
+                type: 'POST',
+                success: function(data) {
+                    console.log(data);
+                    location.reload();
+                },
+                error: function(data) {
+                    MessageBox.ShowMessage(data.responseText);
+                }
+            });
+        }, null);
+    }
+
+    function DeliverPackage(id) {
+
+        MessageBox.AskYesNo('Are you sure!', 'Are you sure you want to deliver this package on the system?', function() {
+            $.ajax({
+                url: '/Admin/DeliverPackage',
+                data: { id: id },
+                type: 'POST',
+                success: function(data) {
+                    console.log(data);
+                    location.reload();
+                },
+                error: function(data) {
+                    MessageBox.ShowMessage(data.responseText);
+                }
+            });
+        }, null);
+    }
+</script>

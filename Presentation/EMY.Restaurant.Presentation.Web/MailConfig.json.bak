@@ -1,0 +1,8 @@
+{
+  "DisplayName": "Papel Lounge",
+  "CredentialPassword": "famifmmlgkoouwuq",
+  "MailAdress": "EnesMuratYILDIRIM@gmail.com",
+  "SmtpServer": "smtp.gmail.com",
+  "SmtpPort": 587,
+  "RequireSSL": "true"
+}

@@ -1,0 +1,212 @@
+﻿@using EMY.Restaurant.Core.Domain.Common
+@using EMY.Restaurant.Core.Domain.Entities;
+@using System.Collections.Generic;
+
+@model List<MenuCategory>
+
+@{
+    ViewData["Title"] = "Menu Settings";
+    Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+}
+<button onclick="CreateOrEditCategory()" class="btn btn-sm border-dark btn-dark">Create New Category</button>
+<table class="table table-sm table-striped table-hover table-responsive-md">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" colspan="3">Menu Categories</th>
+        </tr>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody class="tbody-light">
+        @foreach (var menuCategory in Model)
+        {
+            <tr height="25px">
+
+                <td>
+                    @Html.DisplayFor(modelItem => menuCategory.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => menuCategory.Description)
+                </td>
+                <td style="width:75px;">
+                    <button class="btn-sm btn-secondary" onclick="createOrEditMenuItem('@menuCategory.MenuCategoryID')">Add New Item</button> |
+                    <button class="btn-sm btn-primary" onclick="CreateOrEditCategory('@menuCategory.MenuCategoryID')">Edit</button> |
+                    <button class="btn-sm btn-danger" onclick="DeleteMenuCategory('@menuCategory.MenuCategoryID')">Delete</button>
+                </td>
+            </tr>
+            @if (menuCategory.Menus.Count > 0)
+            {
+                <tr>
+                    <td colspan="3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>#</td>
+                                    <td>Name</td>
+                                    <td>Description</td>
+                                    <td>Price</td>
+                                    <td>Day</td>
+                                    <td>Day Price</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var menu in menuCategory.Menus)
+                                {
+                                    <tr>
+                                        <td style="width:50px;">
+                                            <button class="btn-sm btn-primary" onclick="createOrEditMenuItem('@menuCategory.MenuCategoryID', '@menu.MenuID');">Edit</button> |
+                                            <button class="btn-sm btn-danger" onclick="DeleteMenu('@menu.MenuID');">Delete</button>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => menu.Code)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => menu.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => menu.Description)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => menu.Price)
+                                        </td>
+                                        <td>
+                                            @Enum.GetName(typeof(DayOfWeekOption), menu.DayOfWeek)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => menu.DayOfWeekPrice)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+<script>
+    function CreateOrEditCategory(id) {
+
+        MessageBox.AjaxGet(
+            'Create',
+            '/Admin/CreateOrEditCategory',
+            { categoryid: id },
+            SaveCategory
+        );
+    }
+
+    function SaveCategory() {
+
+        var formData = new FormData();
+
+        formData.append('Name', document.getElementById('Name').value);
+        formData.append('MenuCategoryID', document.getElementById('MenuCategoryID').value);
+        formData.append('Description', document.getElementById('Description').value);
+        formData.append('headerPhoto', document.getElementById('headerPhoto').files[0]);
+        formData.append('logoPhoto', document.getElementById('logoPhoto').files[0]);
+        formData.append('__RequestVerificationToken', document.getElementsByName('__RequestVerificationToken')[0].value)
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SaveCategory',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                console.log('Success!', response)
+                location.reload();
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+
+    function createOrEditMenuItem(menuCategoryID, id) {
+        MessageBox.AjaxGet(
+            'Edit',
+            '/Admin/CreateOrEditMenu/' + id,
+            {
+                MenuCategoryID: menuCategoryID,
+                MenuID: id
+            },
+            SaveMenuItem,
+            cleanPage
+        );
+    }
+
+    function DeleteMenuCategory(id) {
+        MessageBox.AskAccept
+            ('Delete!', 'Are you sure you want to delete this menu category?',
+                function deleteit() {
+                    MessageBox.AjaxPost(
+                        '/Admin/DeleteCategory',
+                        { MenuCategoryID: id },
+                        function (data) {
+                            console.log('Success!', data)
+                            location.reload();
+                        },
+                        function (data) {
+                            MessageBox.Show('Error', data.responseText)
+                        }
+                    );
+                }
+            );
+    }
+
+    function DeleteMenu(id) {
+        MessageBox.AskAccept
+            ('Delete!', 'Are you sure you want to delete this menu?',
+                function deleteit() {
+                    MessageBox.AjaxPost(
+                        '/Admin/DeleteMenu',
+                        { MenuID: id },
+                        function (data) {
+                            console.log('Success!', data)
+                            location.reload();
+                        },
+                        function (data) {
+                            MessageBox.Show('Error', data.responseText)
+                        }
+                    );
+                }
+            );
+    }
+
+    function SaveMenuItem() {
+        var formData = new FormData();
+        formData.append('photoContent', document.getElementById('photoContent').files[0]);
+        formData.append('MenuID', document.getElementById('MenuID').value);
+        formData.append('Code', document.getElementById('Code').value);
+        formData.append('Name', document.getElementById('Name').value);
+        formData.append('Description', document.getElementById('Description').value);
+        formData.append('Price', document.getElementById('Price').value.toString().replace('.', ','));
+        formData.append('MenuCategoryId', document.getElementById('MenuCategoryID').value);
+        formData.append('DayOfWeek', document.getElementById('DayOfWeek').value);
+        formData.append('DayOfWeekPrice', document.getElementById('DayOfWeekPrice').value.toString().replace('.', ','));
+
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SaveMenu',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                console.log('Success!', response)
+                location.reload();
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+</script>
+
+

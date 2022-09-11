@@ -1,0 +1,60 @@
+﻿@using EMY.Restaurant.Core.Application.Repositories.MenuCategoryRepositories
+@using EMY.Restaurant.Infrastructure.Persistence
+@using EMY.Restaurant.Infrastructure.Persistence.Repositories.MenuCategoryRepositories
+@using Microsoft.EntityFrameworkCore
+@inject IMenuCategoryReadRepository _menuCategoryReadRepository;
+
+@{
+    var Categories = _menuCategoryReadRepository.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.Menus.Count > 0).ToList();
+}
+<ul id="top_menu">
+    <li><a href="#0" disabled class="search-overlay-menu-btn"></a></li>
+    <li>
+        <div class="dropdown dropdown-cart">
+            <a asp-controller="Home" asp-action="ShopCart" class="cart_bt" data-bs-toggle="dropdown" aria-expanded="false">
+                <strong id="totalheaderitemcount"></strong>
+            </a>
+
+            <div class="dropdown-menu" style="">
+                <ul id="headerOrder">
+                </ul>
+                <div class="total_drop">
+                    <div class="clearfix add_bottom_15"><strong>Gesamt</strong><span id="totalBasketPrice"></span></div>
+                    <a asp-controller="Home" asp-action="ShopCart" class="btn_1 outline">Warenkorb ansehen</a>
+                    <a asp-controller="Home" asp-action="CheckOut" class="btn_1">Kasse</a>
+                </div>
+            </div>
+        </div>
+        <!-- /dropdown-cart-->
+    </li>
+
+</ul>
+<nav class="main-menu">
+    <div id="header_menu">
+        <a href="#0" class="open_close">
+            <i class="icon_close"></i><span>Menü</span>
+        </a>
+        <a href="/"><img src="/img/favicons/cropped-papel-logo-01-32x32.png" width="35" height="35" alt=""></a>
+    </div>
+    <ul>
+        <li class="submenu">
+            <a href="/" class="show-submenu">Startseite</a>
+        </li>
+
+        <li class="submenu">
+            <a asp-controller="Home" asp-action="Categories" class="show-submenu">Kategorien</a>
+            <ul>
+                @foreach (var item in Categories)
+                {
+                    <li>
+                        @Html.ActionLink(item.Name, "Menu", "Home", new { categoryname = item.Name, categoryid = item.MenuCategoryID })
+                    </li>
+                }
+            </ul>
+        </li>
+        <li>
+            <a href="https://api.whatsapp.com/send?phone=@Html.Raw(@HomePageConfiguration.WhatsappNumber)" target="_blank" style="background-color: #25D366;">Whatsapp</a>
+        </li>
+    </ul>
+</nav>
+

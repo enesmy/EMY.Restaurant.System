@@ -1,0 +1,384 @@
+﻿@using EMY.Restaurant.Infrastructure.Persistence
+@inject IDatabaseFactory database;
+
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+
+    int Today = (int)DateTime.Now.DayOfWeek;
+    if (Today == 0) Today = 7;
+
+    var todayFoods = database.MenuRead.GetWhere(o => !o.IsDeleted && (int)o.DayOfWeek == Today, false).ToList();
+    var allSLides = database.SliderContentRead.GetWhere(o => !o.IsDeleted).OrderBy(o => o.SliderIndex).ToList();
+}
+
+<div id="carousel-home">
+    <div class="owl-carousel owl-theme">
+        @foreach (var slide in allSLides)
+        {
+
+            <div class="owl-slide cover lazy" data-bg="url(/Uploads/Photos/@slide.ImgUrl)">
+                <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                    <div class="container">
+                        <div class='row justify-content-center justify-content-md-@Html.Raw((slide.Side==ContentSide.Right?"end":"start"))'>
+                            <div class='@Html.Raw((slide.Side==ContentSide.Middle? "col-lg-12 static":"col-lg-6 static"))'>
+                                <div class="slide-text @Html.Raw((slide.Side==ContentSide.Right?"text-end":(slide.Side==ContentSide.Middle?"text-center":""))) white">
+                                    <h2 class="owl-slide-animated owl-slide-title">@Html.Raw(@slide.Header)</h2>
+                                    <p class="owl-slide-animated owl-slide-subtitle">
+                                        @Html.Raw(@slide.Content)
+                                    </p>
+                                    <div class="owl-slide-animated owl-slide-cta">
+                                        <a class="btn_1 btn_scroll" href="@slide.Link" role="button">Einzelheiten</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+              
+      
+              
+    </div>
+    <div id="icon_drag_mobile"></div>
+</div>
+<!--/carousel-->
+
+<ul id="banners_grid" class="clearfix">
+    <li>
+        <a href="@HomePageConfiguration.FirstUrl" class="img_container">
+            <img src="/Uploads/Photos/@HomePageConfiguration.FirstImage"
+                 data-src="/Uploads/Photos/@HomePageConfiguration.FirstImage" alt="" class="lazy">
+            <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                <h3>@HomePageConfiguration.FirstHeader</h3>
+                <p>@HomePageConfiguration.FirstText</p>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="@HomePageConfiguration.SecondUrl" class="img_container">
+            <img src="/Uploads/Photos/@HomePageConfiguration.SecondImage"
+                 data-src="/Uploads/Photos/@HomePageConfiguration.SecondImage" alt="" class="lazy">
+            <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                <h3>@HomePageConfiguration.SecondHeader</h3>
+                <p>@HomePageConfiguration.SecondText</p>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="@HomePageConfiguration.ThirdUrl" class="img_container">
+            <img src="/Uploads/Photos/@HomePageConfiguration.ThirdImage"
+                 data-src="/Uploads/Photos/@HomePageConfiguration.ThirdImage" alt="" class="lazy">
+            <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                <h3>@HomePageConfiguration.ThirdHeader</h3>
+                <p>@HomePageConfiguration.ThirdText</p>
+            </div>
+        </a>
+    </li>
+</ul>
+<!--/banners_grid -->
+
+<div class="pattern_2" id='reservationpanel'>
+    <div class="container margin_120_100 home_intro">
+        <div class="row justify-content-center d-flex align-items-center">
+            <div class="col-lg-5 text-lg-center d-none d-lg-block" data-cue="slideInUp">
+                <figure>
+                    <img src="/Uploads/Photos/@HomePageConfiguration.YoutubeVideoPhoto"
+                         data-src="/Uploads/Photos/@HomePageConfiguration.YoutubeVideoPhoto" width="354" height="440" alt=""
+                         class="img-fluid lazy">
+                    <a href="@HomePageConfiguration.YoutubeVideoUrl" class="btn_play" data-cue="zoomIn"
+                       data-delay="500"><span class="pulse_bt"><i class="arrow_triangle-right"></i></span></a>
+                </figure>
+            </div>
+            <div class="col-lg-5 pt-lg-4" data-cue="slideInUp" data-delay="500">
+                <div class="main_title">
+                    <span><em></em></span>
+                    <h2>@HomePageConfiguration.VideoRightsideHeader</h2>
+                    <p>
+                        @HomePageConfiguration.VideoRightsideHeader
+                    </p>
+
+                </div>
+
+                <p>
+                    <img src="/Themes/FooresRestaurant/img/signature.png" width="140" height="50" alt="" class="mt-3">
+                </p>
+            </div>
+        </div>
+        <!--/row -->
+    </div>
+    <!--/container -->
+</div>
+<!--/pattern_2 -->
+@if (todayFoods.Count > 0)
+{
+    <div class="bg_gray">
+        <div class="container margin_120_100" data-cue="slideInUp">
+            <div class="main_title center mb-5">
+                <span><em></em></span>
+                <h2>Unser Tagesmenü</h2>
+            </div>
+            <!-- /main_title -->
+
+            <div class="row magnific-gallery homepage add_bottom_25">
+
+                @foreach (var food in todayFoods)
+                {
+                    <div class="col-lg-6" data-cue="slideInUp">
+                        <div class="menu_item">
+                            <figure>
+                                <a href="/Uploads/Photos/@food.PhotoFileName" title="@food.Name" data-effect="mfp-zoom-in">
+                                    <img src="/Uploads/Photos/@food.PhotoThumbFileName"
+                                 data-src="/Uploads/Photos/@food.PhotoThumbFileName" class="lazy" alt="">
+                                </a>
+                            </figure>
+                            <div class="menu_title">
+                                <h3>@food.Name</h3><em>
+                                    <del style="color:red;">@food.Price</del> @food.DayOfWeekPrice €
+                                </em>
+                            </div>
+                            <p>@food.Description</p>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <!-- /row -->
+            <p class="text-center">
+                <a target="_blank" href="/Uploads/Documents/Getraenkekarte-Papel-1.pdf" class="btn_1 outline" data-cue="zoomIn">Getränkekarte</a>
+                <a target="_blank" href="/Uploads/Documents/Speisekarte-Papel-1.pdf" class="btn_1 outline" data-cue="zoomIn">Speisekarte</a>
+            </p>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /bg_gray -->
+}
+
+
+
+<div class="call_section lazy" data-bg="url(/Uploads/Photos/@HomePageConfiguration.CelebrationImageUrl)">
+    <div class="container clearfix">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6 text-center">
+                <div class="box_1" data-cue="slideInUp">
+                    <h2>@HomePageConfiguration.CelebrationHeader1st<span>@HomePageConfiguration.CelebrationHeader2nd</span></h2>
+                    <p>
+                        @HomePageConfiguration.CelebrationContent
+                    </p>
+                    <a href="@HomePageConfiguration.CelebrationUrl" target="_blank" class="btn_1 mt-3">Kontakt</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/call_section-->
+
+<div class="pattern_2" id="reservation">
+    <div class="container margin_120_100 pb-0">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 text-center d-none d-lg-block" data-cue="slideInUp">
+                <img src="/Themes/FooresRestaurant/img/chef.png" width="420" height="770" alt="" class="img-fluid">
+            </div>
+            <div class="col-lg-6 col-md-8" data-cue="slideInUp">
+                <div class="main_title">
+                    <span><em></em></span>
+                    <h2>einen Tisch reservieren</h2>
+                    <p>oder Rufen Sie uns an unter <a href="https://api.whatsapp.com/send?phone=@HomePageConfiguration.WhatsappNumber" target="_blank">@HomePageConfiguration.WhatsappNumber</a></p>
+                </div>
+                <div id="wizard_container">
+
+                    <form id="wrapped" action="/Home/AddReservation/" method="POST">
+                        <input id="website" name="website" type="text" value="">
+                        <!-- Leave for security protection, read docs for details -->
+                        <div id="middle-wizard">
+                            <div class="step">
+                                <h3 class="main_question"><strong>1/3</strong> Bitte wählen Sie ein Datum</h3>
+                                <div class="form-group">
+                                    <input type="hidden" name="datepicker_field" id="datepicker_field" class="required">
+                                </div>
+                                <div id="DatePicker"></div>
+                            </div>
+                            <!-- /step-->
+                            <div class="step">
+                                <h3 class="main_question"><strong>2/3</strong> Wählen Sie Zeit und Gäste</h3>
+                                <div class="step_wrapper">
+                                    <h4>Zeit</h4>
+                                    <div class="radio_select add_bottom_15">
+                                        <ul>
+                                            <li>
+                                                <input type="radio" id="time_1" name="time" value="12.00am"
+                                                       class="required">
+                                                <label for="time_1">12.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_2" name="time" value="12.30pm"
+                                                       class="required">
+                                                <label for="time_2">12.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_3" name="time" value="1.00pm"
+                                                       class="required">
+                                                <label for="time_3">1.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_4" name="time" value="1.30pm"
+                                                       class="required">
+                                                <label for="time_4">1.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_5" name="time" value="08.00pm"
+                                                       class="required">
+                                                <label for="time_5">8.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_6" name="time" value="08.30pm"
+                                                       class="required">
+                                                <label for="time_6">8.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_7" name="time" value="09.00pm"
+                                                       class="required">
+                                                <label for="time_7">9.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_8" name="time" value="09.30pm"
+                                                       class="required">
+                                                <label for="time_8">9.30</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /time_select -->
+                                </div>
+                                <!-- /step_wrapper -->
+                                <div class="step_wrapper">
+                                    <h4>Wie viele Leute?</h4>
+                                    <div class="radio_select">
+                                        <ul>
+                                            <li>
+                                                <input type="radio" id="people_1" name="people" value="1"
+                                                       class="required">
+                                                <label for="people_1">1</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_2" name="people" value="2"
+                                                       class="required">
+                                                <label for="people_2">2</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_3" name="people" value="3"
+                                                       class="required">
+                                                <label for="people_3">3</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_4" name="people" value="4"
+                                                       class="required">
+                                                <label for="people_4">4</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_5" name="people" value="5"
+                                                       class="required">
+                                                <label for="people_5">5</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_6" name="people" value="6"
+                                                       class="required">
+                                                <label for="people_6">6</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_7" name="people" value="7"
+                                                       class="required">
+                                                <label for="people_7">7</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_8" name="people" value="8"
+                                                       class="required">
+                                                <label for="people_8">8</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_9" name="people" value="9"
+                                                       class="required">
+                                                <label for="people_9">9</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_10" name="people" value="10"
+                                                       class="required">
+                                                <label for="people_10">10</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_11" name="people" value="11"
+                                                       class="required">
+                                                <label for="people_11">11</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="people_12" name="people" value="12"
+                                                       class="required">
+                                                <label for="people_12">12</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- /people_select -->
+                                </div>
+                                <!-- /step_wrapper -->
+                            </div>
+                            <!-- /step-->
+                            <div class="submit step">
+                                <h3 class="main_question"><strong>3/3</strong> Bitte füllen Sie Ihre Daten aus</h3>
+                                <div class="form-group">
+                                    <input type="text" name="name_reserve" class="form-control required"
+                                           placeholder="First and Last Name">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input type="email" name="email_reserve" class="form-control required"
+                                                   placeholder="Your Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <input type="text" name="telephone_reserve" class="form-control required"
+                                                   placeholder="Your Telephone">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <textarea class="form-control" name="opt_message_reserve"
+                                              placeholder="Please provide any additional info"></textarea>
+                                </div>
+                                <div class="form-group terms">
+                                    <label class="container_check">
+                                        Bitte akzeptieren Sie unsere  <a href="#" data-bs-toggle="modal"
+                                                                         data-bs-target="#Datenschutzerklarungmodel">AGB</a>
+                                        <input type="checkbox" name="terms" id="terms" value="Yes" class="required">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="container_check">
+                                        Abonnieren Sie die Mailingliste!
+                                        <input type="checkbox" name="subscribemaillist" id="subscribemaillist"><span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- /step-->
+                        </div>
+                        <!-- /middle-wizard -->
+                        <div id="bottom-wizard">
+                            <button type="button" name="backward" class="backward">Prev</button>
+                            <button type="button" name="forward" class="forward">Next</button>
+                            <button type="submit" name="process" class="submit">Submit</button>
+                        </div>
+                        <!-- /bottom-wizard -->
+                    </form>
+                </div>
+                <!-- /Wizard container -->
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /pattern_2 -->
