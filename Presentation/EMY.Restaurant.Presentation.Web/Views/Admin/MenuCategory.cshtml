@@ -7,9 +7,11 @@
 @{
     ViewData["Title"] = "Menu Settings";
     Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
+    var masterCategories = Model.Where(o => o.MasterMenuCategoryID == null).ToList();
+    var subcategories = Model.Where(o => o.MasterMenuCategoryID != null).ToList();
 }
 <button onclick="CreateOrEditCategory()" class="btn btn-sm border-dark btn-dark">Create New Category</button>
-<table class="table table-sm table-striped table-hover table-responsive-md">
+<table class="table table-sm table-responsive-md">
     <thead class="thead-dark">
         <tr>
             <th scope="col" colspan="3">Menu Categories</th>
@@ -21,9 +23,9 @@
         </tr>
     </thead>
     <tbody class="tbody-light">
-        @foreach (var menuCategory in Model)
+        @foreach (var menuCategory in masterCategories)
         {
-            <tr height="25px">
+            <tr height="25px" class="bg-dark text-light">
 
                 <td>
                     @Html.DisplayFor(modelItem => menuCategory.Name)
@@ -32,7 +34,8 @@
                     @Html.DisplayFor(modelItem => menuCategory.Description)
                 </td>
                 <td style="width:75px;">
-                    <button class="btn-sm btn-secondary" onclick="createOrEditMenuItem('@menuCategory.MenuCategoryID')">Add New Item</button> |
+                    <button class="btn-sm btn-info" onclick="createOrEditSubCategory(null,'@menuCategory.MenuCategoryID');">Add Sub Category</button> |
+                    <button class="btn-sm btn-success" onclick="createOrEditMenuItem('@menuCategory.MenuCategoryID')">Add New Item</button> |
                     <button class="btn-sm btn-primary" onclick="CreateOrEditCategory('@menuCategory.MenuCategoryID')">Edit</button> |
                     <button class="btn-sm btn-danger" onclick="DeleteMenuCategory('@menuCategory.MenuCategoryID')">Delete</button>
                 </td>
@@ -56,8 +59,9 @@
                             <tbody>
                                 @foreach (var menu in menuCategory.Menus)
                                 {
-                                    <tr>
+                                    <tr class="bg-success text-white">
                                         <td style="width:50px;">
+
                                             <button class="btn-sm btn-primary" onclick="createOrEditMenuItem('@menuCategory.MenuCategoryID', '@menu.MenuID');">Edit</button> |
                                             <button class="btn-sm btn-danger" onclick="DeleteMenu('@menu.MenuID');">Delete</button>
                                         </td>
@@ -85,6 +89,71 @@
                         </table>
                     </td>
                 </tr>
+            }
+            foreach (var subcategory in subcategories.Where(o => o.MasterMenuCategoryID == menuCategory.MenuCategoryID))
+            {
+
+                <tr height="25px" class="bg-danger text-light">
+                    <td>@Html.DisplayFor(modelItem => subcategory.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => subcategory.Description)</td>
+
+                    <td style="width:75px;">
+                        <button class="btn-sm btn-success" onclick="createOrEditMenuItem('@subcategory.MenuCategoryID')">Add New Item</button> |
+                        <button class="btn-sm btn-primary" onclick="createOrEditSubCategory('@subcategory.MenuCategoryID','@subcategory.MasterMenuCategoryID')">Edit</button> |
+                        <button class="btn-sm btn-danger" onclick="DeleteMenuCategory('@subcategory.MenuCategoryID')">Delete</button>
+                    </td>
+                </tr>
+
+                @if (subcategory.Menus.Count > 0)
+                {
+                    <tr>
+                        <td colspan="3">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>#</td>
+                                        <td>Name</td>
+                                        <td>Description</td>
+                                        <td>Price</td>
+                                        <td>Day</td>
+                                        <td>Day Price</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var menu in subcategory.Menus)
+                                    {
+                                        <tr class="bg-success text-white">
+                                            <td style="width:50px;">
+
+                                                <button class="btn-sm btn-primary" onclick="createOrEditMenuItem('@subcategory.MenuCategoryID', '@menu.MenuID');">Edit</button> |
+                                                <button class="btn-sm btn-danger" onclick="DeleteMenu('@menu.MenuID');">Delete</button>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => menu.Code)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => menu.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => menu.Description)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => menu.Price)
+                                            </td>
+                                            <td>
+                                                @Enum.GetName(typeof(DayOfWeekOption), menu.DayOfWeek)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => menu.DayOfWeekPrice)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
             }
         }
     </tbody>
@@ -116,6 +185,49 @@
         $.ajax({
             type: 'POST',
             url: '/Admin/SaveCategory',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                console.log('Success!', response)
+                location.reload();
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+
+    function createOrEditSubCategory(id, masterid) {
+        if (id == null) var Headers = 'Create'
+        else var Headers = 'Edit'
+        $.ajax({
+            type: 'GET',
+            url: '/Admin/CreateOrEditSubCategory',
+            data: {
+                menuCategoryID: id,
+                masterMenuCategoryID: masterid
+            },
+            success: function (response) {
+                MessageBox.ShowHtml(Headers + ' Sub Category', response, saveSubCategory);
+                document.getElementById('MasterMenuCategoryID').value = masterid;
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+
+    function saveSubCategory() {
+
+        var formData = new FormData();
+        formData.append('menuCategoryID', document.getElementById('MenuCategoryID').value);
+        formData.append('masterMenuCategoryID', document.getElementById('MasterMenuCategoryID').value);
+        formData.append('name', document.getElementById('Name').value);
+        formData.append('description', document.getElementById('Description').value);
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/SaveSubCategory',
             processData: false,
             contentType: false,
             data: formData,

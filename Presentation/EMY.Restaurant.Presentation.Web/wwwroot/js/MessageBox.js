@@ -41,8 +41,8 @@
         });
     }
 
-    static AjaxPost(pageUrl, parameters,success,error) {
-        let htmlContent = "";
+    static AjaxPost(pageUrl, parameters, success, error) {
+        
         $.ajax({
             url: pageUrl,
             type: "POST",

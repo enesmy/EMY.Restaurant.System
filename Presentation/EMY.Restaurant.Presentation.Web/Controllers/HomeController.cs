@@ -1,9 +1,4 @@
 ﻿using EMY.Restaurant.Core.Application.Abstract;
-using EMY.Restaurant.Core.Application.Repositories.MenuCategoryRepositories;
-using EMY.Restaurant.Core.Application.Repositories.MenuRepositories;
-using EMY.Restaurant.Core.Application.Repositories.OrderItemRepositories;
-using EMY.Restaurant.Core.Application.Repositories.OrderRepositories;
-using EMY.Restaurant.Core.Application.Repositories.ReservationRepositories;
 using EMY.Restaurant.Core.Domain.Common;
 using EMY.Restaurant.Core.Domain.Entities;
 using EMY.Restaurant.Core.Domain.ViewModels;
@@ -30,13 +25,11 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             this.databaseFactory = databaseFactory;
             _emailService = emailService;
         }
-        
+
         public IActionResult Index()
-        {
-            var Categories = databaseFactory.MenuCategoryRead.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.Menus.Count > 0).ToList();
-            ViewBag.Categories = Categories;
-            return PartialView();        
-       }
+        {           
+            return View();
+        }
 
         public async Task<IActionResult> Menu(string categoryname, string categoryid)
         {
@@ -143,7 +136,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
 
 
             Guid orderID = Guid.NewGuid();
-            
+
             List<string> productsids = products.Select(o => o.productid).ToList();
             var dbproducts = databaseFactory.MenuRead.GetWhere(o => productsids.Contains(o.MenuID.ToString().ToLower()));
             decimal TotalPrice = 0;
@@ -193,7 +186,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
         private static bool IsValid(string email)
         {
             var valid = true;
-           
+
             try
             {
                 var emailAddress = new MailAddress(email);

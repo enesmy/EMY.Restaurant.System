@@ -1,6 +1,0 @@
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=dbPapel;Trusted_Connection=True;"
-  },
-  "SystemName":  "Papel Lounge"
-}

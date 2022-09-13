@@ -15,7 +15,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace EMY.Restaurant.Presentation.Web.Controllers
@@ -77,7 +76,67 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize(SystemMainStatics.DefaultScheme)]
-        async Task<Photo> UploadImage(IFormFile file, int maxWidth = 1700, int thumbWidth = 128, int thumbHeight = 128, bool generateThumb = true)
+        async Task<Photo> UploadImageold(IFormFile file, int maxWidth = 1700, int thumbWidth = 128, int thumbHeight = 128, bool generateThumb = true)
+        {
+            Log.Debug("Upload Started!");
+            if (file.ContentType.StartsWith("image"))
+            {
+                Photo photo = new Photo();
+                photo.PhotoID = Guid.NewGuid();
+                photo.FileName = file.FileName;
+                photo.Extention = ".jpg";
+                await Database.PhotoWrite.AddAsync(photo, this.ActiveUserID());
+
+
+                //MemoryStream memory = new MemoryStream();
+
+                //await file.CopyToAsync(memory);
+
+                string wwwPath = this.Environment.WebRootPath;
+                string contentPath = this.Environment.ContentRootPath;
+                string path = Path.Combine(this.Environment.WebRootPath, "Uploads/Photos/");
+                string tempPath = Path.Combine(path, photo.PhotoID + "_org" + photo.Extention);
+                string filePath = Path.Combine(path, photo.PhotoID + photo.Extention);
+                string filePathThumb = Path.Combine(path, photo.PhotoID + "_thumb" + photo.Extention);
+
+                using (var fileStream = new FileStream(tempPath, FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+
+                Image image = Image.FromFile(tempPath);
+                //Log.Debug("Image.FromStream(memory)");
+                //image.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                //Log.Debug("image.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);");
+                if (image.Width > maxWidth)
+                {
+
+                    int mustHeight = (int)(((decimal)maxWidth / (decimal)image.Width) * (decimal)image.Height);
+                    var original = image.ResizeImage(new Size(maxWidth, mustHeight));
+                    original.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+                else
+                {
+                    image.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+
+                if (generateThumb)
+                {
+                    var thumb = image.ResizeImage(new Size(thumbWidth, thumbHeight));
+                    thumb.Save(filePathThumb, System.Drawing.Imaging.ImageFormat.Jpeg);
+                }
+                image.Dispose();
+                image = null;
+                System.IO.File.Delete(tempPath);
+                return photo;
+            }
+            return new Photo();
+        }
+
+
+        [Microsoft.AspNetCore.Authorization.Authorize(SystemMainStatics.DefaultScheme)]
+        async Task<Photo> UploadImage(IFormFile file, int width, int height, int thumbWidth = 128, int thumbHeight = 128, bool generateThumb = true)
         {
             Log.Debug("Upload Started!");
             if (file.ContentType.StartsWith("image"))
@@ -108,23 +167,16 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
 
                 Image image = Image.FromFile(tempPath);
                 //Log.Debug("Image.FromStream(memory)");
-                //image.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
-                //Log.Debug("image.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);");
-                if (image.Width > maxWidth)
-                {
-                    int mustHeight = maxWidth / image.Width * image.Height;
-                    var original = image.ResizeImage(new Size(maxWidth, mustHeight));
-                    original.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
-                }
-                else
-                {
-                    image.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
-                }
+                //image.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                //Log.Debug("image.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);");
+
+                var original = image.ResizeImage(new Size(width, height));
+                original.Save(filePath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
                 if (generateThumb)
                 {
                     var thumb = image.ResizeImage(new Size(thumbWidth, thumbHeight));
-                    thumb.Save(filePathThumb, System.Drawing.Imaging.ImageFormat.Png);
+                    thumb.Save(filePathThumb, System.Drawing.Imaging.ImageFormat.Jpeg);
                 }
                 image.Dispose();
                 image = null;
@@ -133,6 +185,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             }
             return new Photo();
         }
+
 
         [HttpGet]
         [EMY_ISINROLE(Forms.MenuDesign, AuthType.Read)]
@@ -157,11 +210,11 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                 var uploadedHeaderPhoto = new Photo();
                 if (logoPhoto == null)
                 {
-                    uploadedHeaderPhoto = await UploadImage(headerPhoto, 1700, 248, 248, true);
+                    uploadedHeaderPhoto = await UploadImage(headerPhoto, 1400, 780, 248, 248, true);
                     LogoPhotoID = uploadedHeaderPhoto.PhotoID;
                     LogoPhotoUrl = uploadedHeaderPhoto.PhotoID.ToString() + "_thumb" + uploadedHeaderPhoto.Extention;
                 }
-                else uploadedHeaderPhoto = await UploadImage(headerPhoto, generateThumb: false);
+                else uploadedHeaderPhoto = await UploadImage(headerPhoto, width: 1400, height: 780, generateThumb: false);
                 HeaderPhotoUrl = uploadedHeaderPhoto.PhotoID.ToString() + uploadedHeaderPhoto.Extention;
                 HeaderPhotoID = uploadedHeaderPhoto.PhotoID;
 
@@ -170,7 +223,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
 
             if (logoPhoto != null)
             {
-                var uploadedLogoPhoto = await UploadImage(logoPhoto);
+                var uploadedLogoPhoto = await UploadImage(logoPhoto, width: 248, height: 248, generateThumb: false);
                 LogoPhotoUrl = uploadedLogoPhoto.PhotoID.ToString() + uploadedLogoPhoto.Extention; ;
                 LogoPhotoID = uploadedLogoPhoto.PhotoID;
             }
@@ -270,7 +323,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             int result = 0;
             if (photoContent != null)
             {
-                var photo = await UploadImage(photoContent);
+                var photo = await UploadImage(photoContent, 800, 600, 400, 400, true);
                 menu.PhotoID = photo.PhotoID;
                 menu.PhotoFileName = photo.PhotoID.ToString() + photo.Extention;
                 menu.PhotoThumbFileName = photo.PhotoID.ToString() + "_thumb" + photo.Extention;
@@ -515,7 +568,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             if (photoContent == null) return NoContent();
             try
             {
-                var photo = await UploadImage(photoContent, generateThumb: false);
+                var photo = await UploadImageold(photoContent, generateThumb: false);
                 var result = HomePageConfiguration.SetValue(key, photo.PhotoID.ToString() + photo.Extention);
                 return Ok(result.Message);
             }
@@ -539,7 +592,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             string newelementContent, int newelementAlign, string newelementLink)
         {
             if (newelementPhoto == null) return BadRequest("Photo was empty!");
-            var photo = await UploadImage(newelementPhoto, generateThumb: false);
+            var photo = await UploadImage(newelementPhoto, width: 1450, height: 750, generateThumb: false);
             if (photo.PhotoID == Guid.Empty)
                 return UnprocessableEntity("Picture is empty!");
 
@@ -588,6 +641,52 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             }
             await Database.SliderContentWrite.RemoveAsync(slide, this.ActiveUserID());
             return Ok($"'{slide.Header}' has been removed!");
+        }
+
+        [HttpGet]
+        [EMY_ISINROLE(Forms.MenuDesign, AuthType.Write)]
+        public async Task<IActionResult> CreateOrEditSubCategory(string menuCategoryID, string masterMenuCategoryID)
+        {
+            var menuCategory = new MenuCategory() { MasterMenuCategoryID = masterMenuCategoryID.ToGuid() };
+            if (menuCategoryID.ToGuid() != null)
+            {
+                menuCategory = await Database.MenuCategoryRead.GetByIdAsync(menuCategoryID.ToGuid());
+            }
+            return PartialView(menuCategory);
+
+        }
+
+        [HttpPost]
+        [EMY_ISINROLE(Forms.MenuDesign, AuthType.Write)]
+        public async Task<IActionResult> SaveSubCategory(string menuCategoryID, string masterMenuCategoryID, string name, string description)
+        {
+            if (menuCategoryID.ToGuid() != Guid.Empty)
+            {
+                var currentCategory = await Database.MenuCategoryRead.GetByIdAsync(menuCategoryID.ToGuid());
+                if (currentCategory == null)
+                    return NotFound("Menu category is not found!");
+
+                currentCategory.Name = name;
+                currentCategory.Description = description;
+                await Database.MenuCategoryWrite.UpdateAsync(currentCategory, this.ActiveUserID());
+                return Ok(currentCategory);
+            }
+            else
+            {
+                var menuCategory = new MenuCategory()
+                {
+                    MasterMenuCategoryID = masterMenuCategoryID.ToGuid(),
+                    MenuCategoryID = menuCategoryID.ToGuid(),
+                    Active = true,
+                    Description = description,
+                    Name = name,
+                    IsDeleted = false
+                };
+
+                await Database.MenuCategoryWrite.AddAsync(menuCategory, this.ActiveUserID());
+                return Ok("Ready!");
+            }
+
         }
 
     }
