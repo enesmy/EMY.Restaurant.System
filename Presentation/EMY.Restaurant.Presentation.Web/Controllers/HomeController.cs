@@ -1,9 +1,4 @@
 ﻿using EMY.Restaurant.Core.Application.Abstract;
-using EMY.Restaurant.Core.Application.Repositories.MenuCategoryRepositories;
-using EMY.Restaurant.Core.Application.Repositories.MenuRepositories;
-using EMY.Restaurant.Core.Application.Repositories.OrderItemRepositories;
-using EMY.Restaurant.Core.Application.Repositories.OrderRepositories;
-using EMY.Restaurant.Core.Application.Repositories.ReservationRepositories;
 using EMY.Restaurant.Core.Domain.Common;
 using EMY.Restaurant.Core.Domain.Entities;
 using EMY.Restaurant.Core.Domain.ViewModels;
@@ -30,14 +25,15 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             this.databaseFactory = databaseFactory;
             _emailService = emailService;
         }
-        
+
         public IActionResult Index()
         {
-            var Categories = databaseFactory.MenuCategoryRead.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.Menus.Count > 0).ToList();
-            ViewBag.Categories = Categories;
-            return PartialView();        
-       }
-
+            return View();
+        }
+        public IActionResult Whatsapp()
+        {
+            return View();
+        }
         public async Task<IActionResult> Menu(string categoryname, string categoryid)
         {
             var menuCategory = await databaseFactory.MenuCategoryRead.Table.Include(o => o.Menus).
@@ -95,9 +91,24 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                 Message = opt_message_reserve ?? "",
                 ConfirmationStatus = ReservationConfirmationStatus.Pending
             }, this.ActiveUserID());
-            var mail = await _emailService.SendEmail(email_reserve, "Authorization", $"<h2>Please authorize your reservation!</h2> <a href='https://localhost:44383/Home/AuthorizeReservation?id={id.ToString()}'>For authorization please click here!</a><br><br><br>" +
+
+            var reservationmailcontent = HomePageConfiguration.CreateReservationMail;
+            reservationmailcontent = reservationmailcontent
+                .Replace("@reservation_id", id.ToString())
+                .Replace("@name", name_reserve)
+                .Replace("@phone", telephone_reserve)
+                .Replace("@message", opt_message_reserve)
+                .Replace("@people", people.ToString());
+
+            string emailregistrationmailcontent = HomePageConfiguration.CreateEmailRegistrationMail;
+            emailregistrationmailcontent = emailregistrationmailcontent
+                .Replace("@registration_id",id.ToString())
+               .Replace("@email", email_reserve);
+
+
+            var mail = await _emailService.SendEmail(email_reserve, "Reservation Authorization", $"{reservationmailcontent}" +
                 $"" +
-               (subscribemaillist ? $"<h2>Please authorize your mail adres!</h2> <a href='https://localhost:44383/Home/AuthorizeSubscribe?id={id.ToString()}'>For authorization please click here!</a>" : ""), System.Net.Mail.MailPriority.Normal);
+               (subscribemaillist ? emailregistrationmailcontent : ""), System.Net.Mail.MailPriority.Normal);
 
             if (!mail.IsSuccess)
             {
@@ -143,7 +154,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
 
 
             Guid orderID = Guid.NewGuid();
-            
+
             List<string> productsids = products.Select(o => o.productid).ToList();
             var dbproducts = databaseFactory.MenuRead.GetWhere(o => productsids.Contains(o.MenuID.ToString().ToLower()));
             decimal TotalPrice = 0;
@@ -184,7 +195,15 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                 Discount = 0,
                 Notes = notes ?? ""
             };
-            _emailService.SendEmail(email, "Order", $"<h2>Your order number is {orderNumber}</h2> <a href='https://localhost:44383/Home/OrderAuthorize?id={orderID.ToString()}'>For order authorize please click here!</a><br><br><br>", System.Net.Mail.MailPriority.Normal);
+            var mailcontent = HomePageConfiguration.CreateOrderMail;
+            mailcontent = mailcontent
+                .Replace("@order_id", orderID.ToString())
+                .Replace("@order_number", orderNumber)
+                .Replace("@total_price", TotalPrice.ToString())
+                .Replace("@full_name", fullName)
+                .Replace("@notes", notes);
+
+            _emailService.SendEmail(email, "Order", mailcontent, System.Net.Mail.MailPriority.Normal);
             await databaseFactory.OrderWrite.AddAsync(order, this.ActiveUserID());
             await databaseFactory.OrderItemWrite.AddRangeAsync(orderItems, this.ActiveUserID());
             return Ok(orderID.ToString());
@@ -193,7 +212,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
         private static bool IsValid(string email)
         {
             var valid = true;
-           
+
             try
             {
                 var emailAddress = new MailAddress(email);

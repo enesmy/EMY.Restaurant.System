@@ -2,10 +2,18 @@
 @using EMY.Restaurant.Infrastructure.Persistence
 @using EMY.Restaurant.Infrastructure.Persistence.Repositories.MenuCategoryRepositories
 @using Microsoft.EntityFrameworkCore
-@inject IMenuCategoryReadRepository _menuCategoryReadRepository;
+@inject IDatabaseFactory databaseFactory;
 
 @{
-    var Categories = _menuCategoryReadRepository.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.Menus.Count > 0).ToList();
+
+    var subCategories = databaseFactory.MenuCategoryRead.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.MasterMenuCategoryID != null && o.Menus.Count > 0).ToList();
+
+    var masterCategories = databaseFactory.MenuCategoryRead.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.MasterMenuCategoryID == null).ToList();
+
+
+    masterCategories = masterCategories.Where(o => o.Menus.Count > 0 || (subCategories.Count(x => x.MasterMenuCategoryID == o.MenuCategoryID) > 0)).ToList();
+
+    var Categories = masterCategories.OrderByDescending(o => o.CreatedAt).OrderBy(o => o.Index).ToList();
 }
 <ul id="top_menu">
     <li><a href="#0" disabled class="search-overlay-menu-btn"></a></li>
@@ -32,28 +40,38 @@
 <nav class="main-menu">
     <div id="header_menu">
         <a href="#0" class="open_close">
-            <i class="icon_close"></i><span>Menü</span>
+            <i class="icon_close"></i><span>MENÜ</span>
         </a>
         <a href="/"><img src="/img/favicons/cropped-papel-logo-01-32x32.png" width="35" height="35" alt=""></a>
     </div>
     <ul>
         <li class="submenu">
-            <a href="/" class="show-submenu">Startseite</a>
+            <a href="/" class="show-submenu">STARTSEITE</a>
         </li>
 
         <li class="submenu">
-            <a asp-controller="Home" asp-action="Categories" class="show-submenu">Kategorien</a>
+            <a href="#" class="show-submenu">MENÜ</a>
             <ul>
+               @* <li>
+                    @Html.ActionLink("Speise Karte", "Categories","Home",new{ Speise = true})
+                </li>
+                <li>
+                    @Html.ActionLink("Getränke Karte", "Categories","Home",new{ Speise = false})
+                </li>*@
                 @foreach (var item in Categories)
                 {
                     <li>
-                        @Html.ActionLink(item.Name, "Menu", "Home", new { categoryname = item.Name, categoryid = item.MenuCategoryID })
+                        @Html.ActionLink(item.Name, "Categories", "Home", new { categoryname = item.Name, categoryid = item.MenuCategoryID })
                     </li>
                 }
             </ul>
         </li>
+        <li class="submenu">
+            <a href="/Home/Index#reservation" class="show-submenu">RESERVIERUNG</a>
+        </li>
         <li>
-            <a href="https://api.whatsapp.com/send?phone=@Html.Raw(@HomePageConfiguration.WhatsappNumber)" target="_blank" style="background-color: #25D366;">Whatsapp</a>
+
+            <a asp-controller="Home" asp-action="Whatsapp" target="_blank" style="color: #25D366;">WHATSAPP <i aria-hidden="true" class="fab fa-whatsapp"></i></a>
         </li>
     </ul>
 </nav>

@@ -1,0 +1,40 @@
+﻿@model EMY.Restaurant.Core.Domain.Entities.MenuCategory
+
+<h4>Sub Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="CreateOrEditSubCategory">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(o=>o.MenuCategoryID)
+            @Html.HiddenFor(o=>o.MasterMenuCategoryID)
+            <div class="form-group">
+                <label asp-for="Index" class="control-label"></label>
+                @Html.EditorFor(modelItem => Model.Index,
+                new { htmlAttributes = new { @class = "form-control bg-dark text-light", type="number", style="padding-left:10px;", step="1" } })
+                <span asp-validation-for="Index" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control bg-dark text-light" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control bg-dark text-light" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Banner (1400x780)</label>
+                <input id="headerPhoto" name="headerPhoto" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff" class="form-control bg-dark text-light" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Logo (248x248)</label>
+                <input id="logoPhoto" name="logoPhoto" type="file" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff" class="form-control bg-dark text-light" />
+            </div>
+        </form>
+    </div>
+</div>
+

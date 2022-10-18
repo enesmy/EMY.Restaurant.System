@@ -21,5 +21,7 @@ namespace EMY.Restaurant.Core.Domain.Entities
         public Guid PhotoID { get; set; }
         public string PhotoFileName { get; set; }
         public string PhotoThumbFileName { get; set; }
+        public int Index { get; set; }
+        public bool ShowInHomePage { get; set; }
     }
 }

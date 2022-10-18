@@ -1,4 +1,5 @@
 ﻿@using EMY.Restaurant.Infrastructure.Persistence
+@using Microsoft.EntityFrameworkCore
 @inject IDatabaseFactory database;
 
 @{
@@ -8,7 +9,10 @@
     int Today = (int)DateTime.Now.DayOfWeek;
     if (Today == 0) Today = 7;
 
-    var todayFoods = database.MenuRead.GetWhere(o => !o.IsDeleted && (int)o.DayOfWeek == Today, false).ToList();
+    var todayFoods = database.MenuRead.Table
+    .AsNoTracking()
+    .Include(o=>o.Category)
+    .Where(o => !o.IsDeleted && !o.Category.IsDeleted && ((int)o.DayOfWeek == Today || o.ShowInHomePage)).ToList();
     var allSLides = database.SliderContentRead.GetWhere(o => !o.IsDeleted).OrderBy(o => o.SliderIndex).ToList();
 }
 
@@ -27,9 +31,7 @@
                                     <p class="owl-slide-animated owl-slide-subtitle">
                                         @Html.Raw(@slide.Content)
                                     </p>
-                                    <div class="owl-slide-animated owl-slide-cta">
-                                        <a class="btn_1 btn_scroll" href="@slide.Link" role="button">Einzelheiten</a>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -37,9 +39,9 @@
                 </div>
             </div>
         }
-              
-      
-              
+
+
+
     </div>
     <div id="icon_drag_mobile"></div>
 </div>
@@ -135,7 +137,16 @@
                             </figure>
                             <div class="menu_title">
                                 <h3>@food.Name</h3><em>
-                                    <del style="color:red;">@food.Price</del> @food.DayOfWeekPrice €
+                                    @if ((int)food.DayOfWeek == Today)
+                                    {
+                                        <del style="color:red;">@food.Price</del> @food.DayOfWeekPrice @Html.Raw("€")
+
+                                    }
+                                    else
+                                    {
+                                        @food.Price
+                                        @Html.Raw("€")
+                                    }
                                 </em>
                             </div>
                             <p>@food.Description</p>
@@ -184,7 +195,7 @@
                 <div class="main_title">
                     <span><em></em></span>
                     <h2>einen Tisch reservieren</h2>
-                    <p>oder Rufen Sie uns an unter <a href="https://api.whatsapp.com/send?phone=@HomePageConfiguration.WhatsappNumber" target="_blank">@HomePageConfiguration.WhatsappNumber</a></p>
+                    <p>oder Rufen Sie uns an unter <a asp-controller="Home" asp-action="Whatsapp" target="_blank">Whatsapp</a></p>
                 </div>
                 <div id="wizard_container">
 
@@ -207,45 +218,91 @@
                                     <div class="radio_select add_bottom_15">
                                         <ul>
                                             <li>
-                                                <input type="radio" id="time_1" name="time" value="12.00am"
+                                                <input type="radio" id="time_1" name="time" value="1.00pm"
                                                        class="required">
-                                                <label for="time_1">12.00</label>
+                                                <label for="time_1">13.00</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_2" name="time" value="12.30pm"
+                                                <input type="radio" id="time_2" name="time" value="1.30pm"
                                                        class="required">
-                                                <label for="time_2">12.30</label>
+                                                <label for="time_2">13.30</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_3" name="time" value="1.00pm"
+                                                <input type="radio" id="time_3" name="time" value="2.00pm"
                                                        class="required">
-                                                <label for="time_3">1.00</label>
+                                                <label for="time_3">14.00</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_4" name="time" value="1.30pm"
+                                                <input type="radio" id="time_4" name="time" value="2.30pm"
                                                        class="required">
-                                                <label for="time_4">1.30</label>
+                                                <label for="time_4">14.30</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_5" name="time" value="08.00pm"
+                                                <input type="radio" id="time_5" name="time" value="3.00pm"
                                                        class="required">
-                                                <label for="time_5">8.00</label>
+                                                <label for="time_5">15.00</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_6" name="time" value="08.30pm"
+                                                <input type="radio" id="time_6" name="time" value="3.30pm"
                                                        class="required">
-                                                <label for="time_6">8.30</label>
+                                                <label for="time_6">15.30</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_7" name="time" value="09.00pm"
+                                                <input type="radio" id="time_7" name="time" value="4.00pm"
                                                        class="required">
-                                                <label for="time_7">9.00</label>
+                                                <label for="time_7">16.00</label>
                                             </li>
                                             <li>
-                                                <input type="radio" id="time_8" name="time" value="09.30pm"
+                                                <input type="radio" id="time_8" name="time" value="4.30pm"
                                                        class="required">
-                                                <label for="time_8">9.30</label>
+                                                <label for="time_8">16.30</label>
                                             </li>
+                                            <li>
+                                                <input type="radio" id="time_9" name="time" value="5.00pm"
+                                                       class="required">
+                                                <label for="time_9">17.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_10" name="time" value="5.30pm"
+                                                       class="required">
+                                                <label for="time_10">17.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_11" name="time" value="6.00pm"
+                                                       class="required">
+                                                <label for="time_11">18.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_12" name="time" value="6.30pm"
+                                                       class="required">
+                                                <label for="time_12">18.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_13" name="time" value="7.00pm"
+                                                       class="required">
+                                                <label for="time_13">19.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_14" name="time" value="7.30pm"
+                                                       class="required">
+                                                <label for="time_14">19.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_15" name="time" value="8.00pm"
+                                                       class="required">
+                                                <label for="time_15">20.00</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_16" name="time" value="8.30pm"
+                                                       class="required">
+                                                <label for="time_16">20.30</label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="time_17" name="time" value="9.00pm"
+                                                       class="required">
+                                                <label for="time_17">21.00</label>
+                                            </li>
+
                                         </ul>
                                     </div>
                                     <!-- /time_select -->

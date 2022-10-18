@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
+    ViewData["Title"] = "Whatsapp";
+}
+
+@using EMY.Restaurant.Infrastructure.Persistence
+
+
+<div class="hero_single inner_pages background-image" data-background="url(/Uploads/Photos/@HomePageConfiguration.WhatsappBG)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+    <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-9 col-lg-10 col-md-8">
+                    <a href="https://api.whatsapp.com/send?phone=@HomePageConfiguration.WhatsappNumber" >
+                        <h1 class="display-4" style="color: #25D366;"><i aria-hidden="true" class="fab fa-whatsapp"></i> Whatsapp</h1>
+                    </a>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+    </div>
+    <div class="frame white"></div>
+</div>
+<div class="pattern_2">
+    <div class=" px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        
+        <h3>
+            Ganz einfach über WhatsApp reservieren: <a href="https://api.whatsapp.com/send?phone=@HomePageConfiguration.WhatsappNumber" style="color: #25D366;" target="_blank">@HomePageConfiguration.WhatsappNumber</a><br />
+            <br />Telefon: <a href="tel:@HomePageConfiguration.PhoneNumber">@HomePageConfiguration.PhoneNumber</a> <br />
+
+        </h3>
+        <hr />
+       
+      
+
+        <b>Datenschutz WhatsApp:</b> Wenn Sie über den Instant-Messenger-Dienst WhatsApp Kontakt mit uns aufnehmen, übermitteln Sie uns damit automatisch Ihre Telefonnummer. Diese wird auf gesicherten mobilen Endgeräten des Restaurant Papellounge gespeichert. Wir erstellen keine Userprofile und geben die Daten nicht an Dritte weiter, soweit dies nicht durch die allgemeinen Geschäftsbedingungen von WhatsApp bereits als Nutzungsbedingung festgelegt ist. Wir verwenden die Kontaktnummer bzw. Mobilnummer nur und ausschließlich für die WhatsApp-Kommunikation mit Ihnen sowie ggf. für telefonische Rückfragen im Rahmen Reservierungen.
+        Bitte beachten Sie, dass die Vertraulichkeit und Datensicherheit bei Instant-Messenger-Diensten wie WhatsApp nicht gewährleistet ist. Wenn Sie WhatsApp auf Ihrem Mobilgerät installieren und nutzen, stimmen Sie den Allgemeinen Geschäftsbedingungen von WhatsApp zu, auf die das Restaurant Papellounge keinen Einfluss hat. Diese beinhalten unter anderem, dass Sie der WhatsApp Inc. Zugriff auf Ihre Telefonnummer und die auf Ihrem Mobilgerät gespeicherten Kontakte gewähren. Ebenso werden Daten auf Servern von WhatsApp Inc. gespeichert, die nicht dem europäischen Datenschutzrecht unterliegen.
+        Das Restaurant Papellounge haftet nicht für Schäden, die durch Ihre Nutzung der entsprechenden Plattformen entstehen.
+    </div>
+</div>

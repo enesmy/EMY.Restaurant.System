@@ -1,11 +1,12 @@
 ﻿@using EMY.Restaurant.Core.Domain.Entities
+@using EMY.Restaurant.Infrastructure.Persistence
 @model Order
 @{
     ViewData["Title"] = "Bestätigung";
     Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
     string domain = Model.EmailAdress.Split('@')[1];
 }
-<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+<div class="hero_single inner_pages background-image" data-background="url(/Uploads/Photos/@HomePageConfiguration.OthersBG)" style="background-image: url(&quot;/Uploads/Photos/@HomePageConfiguration.OthersBG&quot;);">
     <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
         <div class="container">
             <div class="row justify-content-center">

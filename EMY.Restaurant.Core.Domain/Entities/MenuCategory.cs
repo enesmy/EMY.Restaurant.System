@@ -18,6 +18,7 @@ namespace EMY.Restaurant.Core.Domain.Entities
         public Guid LogoPhotoID { get; set; }
         public string LogoPhotoURL { get; set; }
         public bool Active { get; set; }
+        public int Index { get; set; }
         public List<Menu> Menus { get; set; }
     }
 }

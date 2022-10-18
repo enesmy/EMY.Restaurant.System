@@ -35,7 +35,7 @@
                     Log.Debug("First Editorfor");
                 }
                 @Html.EditorFor(modelItem => HomePageConfiguration.FirstHeader, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
-                
+
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SaveContent('FirstHeader',document.getElementById('FirstHeader').value)">Save</button>
@@ -396,6 +396,96 @@
             </td>
         </tr>
         <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Create Order Mail Content<br />
+                <button class="btn-sm btn-primary" href="#" onclick="CreateOrderInformation()">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.CreateOrderMail,  new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } )
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CreateOrderMail',document.getElementById('CreateOrderMail').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Create Reservation Mail Content<br />
+                <button class="btn-sm btn-primary" href="#" onclick="CreateReservationInformation()">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.CreateReservationMail,  new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } )
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CreateReservationMail',document.getElementById('CreateReservationMail').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+         <tr>
+            <td>
+                Email Subscriptions Mail Content<br />
+                <button class="btn-sm btn-primary" href="#" onclick="CreateEmailRegistration()">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.CreateEmailRegistrationMail,  new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } )
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('CreateEmailRegistrationMail',document.getElementById('CreateEmailRegistrationMail').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr /></td>
+        </tr>
+        <tr>
+            <td>
+                Kategorien BG Photo
+            </td>
+            <td>
+                <input id="KategorienBG" name="KategorienBG" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('KategorienBG','KategorienBG')">Save</button>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Whatsapp BG Photo
+            </td>
+            <td>
+                <input id="WhatsappBG" name="WhatsappBG" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('WhatsappBG','WhatsappBG')">Save</button>
+            </td>
+        </tr>
+
+         <tr>
+            <td>
+                Others BG Photo
+            </td>
+            <td>
+                <input id="OthersBG" name="OthersBG" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePicture('OthersBG','OthersBG')">Save</button>
+            </td>
+        </tr>
+        <tr>
             <td colspan="3"><hr style="border-top: 2px dashed black;"></td>
         </tr>
     </tbody>
@@ -437,4 +527,53 @@
             }
         });
     }
+
+    function CreateOrderInformation() {
+        var text = `
+                You can add this tags!
+                        <br>&#64;order_id
+                        <br>&#64;order_number
+                        <br>&#64;total_price
+                        <br>&#64;full_name
+                        <br>&#64;notes                       <br> <br>
+                    For authorization: <br>
+                  Domain(papellounge.de) + /Home/OrderAuthorize?id= + &#64;order_id
+                `;
+        MessageBox.ShowHtml('Info!', text, null);
+
+        document.getElementById('modalSave').hidden = true;
+    }
+
+    function CreateReservationInformation() {
+        var text = `
+                You can add this tags!
+                        <br>&#64;reservation_id
+                        <br>&#64;name
+                        <br>&#64;phone
+                        <br>&#64;message
+                        <br>&#64;people
+                             <br> <br>
+                            For authorization: <br>
+                                Domain(papellounge.de) + /Home/AuthorizeReservation?id= + &#64;reservation_id
+                `;
+        MessageBox.ShowHtml('Info!', text, null);
+
+        document.getElementById('modalSave').hidden = true;
+    }
+
+    function CreateEmailRegistration() {
+        var text = `
+                    You can add this tags!
+                        <br>&#64;registration_id
+                            <br>&#64;email
+                          
+                                 <br> <br>
+                                For authorization: <br>
+                                            Domain(papellounge.de) + /Home/AuthorizeSubscribe?id= + &#64;registration_id
+                    `;
+        MessageBox.ShowHtml('Info!', text, null);
+
+        document.getElementById('modalSave').hidden = true;
+    }
+
 </script>

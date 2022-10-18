@@ -317,7 +317,59 @@ namespace EMY.Restaurant.Infrastructure.Persistence
         }
         #endregion
 
+        public static string CreateOrderMail
+        {
+            get
+            {
+                string result = configuration["CreateOrderMail"];
+                return result;
+            }
+        }
 
+        public static string CreateReservationMail
+        {
+            get
+            {
+                string result = configuration["CreateReservationMail"];
+                return result;
+            }
+        }
+
+        public static string CreateEmailRegistrationMail
+        {
+            get
+            {
+                string result = configuration["CreateEmailRegistrationMail"];
+                return result;
+            }
+        }
+
+                public static string KategorienBG
+        {
+            get
+            {
+                string result = configuration["KategorienBG"];
+                return result;
+            }
+        }
+
+        public static string WhatsappBG
+        {
+            get
+            {
+                string result = configuration["WhatsappBG"];
+                return result;
+            }
+        }
+
+        public static string OthersBG
+        {
+            get
+            {
+                string result = configuration["OthersBG"];
+                return result;
+            }
+        }
 
         public static (bool isSucces, string Message) SetValue(string key, string value)
         {
@@ -347,6 +399,8 @@ namespace EMY.Restaurant.Infrastructure.Persistence
                 return Directory.GetCurrentDirectory() + "/HomePageContent.json";
             }
         }
+
+      
 
         static void Crypt(CryptType type)
         {

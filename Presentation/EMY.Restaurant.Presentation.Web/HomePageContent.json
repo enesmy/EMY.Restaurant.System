@@ -27,6 +27,11 @@
   "ThirdUrl": "/",
   "SecondImage": "edaed8dc-6dba-4306-a48d-d6108501371f.jpg",
   "FirstImage": "c99dbbd3-dc1e-4bda-a141-df53e70cf076.jpg",
-  "CelebrationImageUrl": "da0d85e6-af59-4234-a250-0e4ee58eeea9.jpg",
-  "YoutubeVideoPhoto": "6f440280-d7f5-47c3-9ffb-de8346a577fb.png"
+  "CelebrationImageUrl": "21769223-93ad-46d4-b0eb-a5c31fe4fa99.jpg",
+  "YoutubeVideoPhoto": "22a53ecb-3391-4f5a-ac70-e8a42126a547.jpg",
+  "CreateOrderMail": "<h2>Your order number is @order_number</h2> <a href='https://papellounge.de/Home/OrderAuthorize?id=@order_id'>For order authorize please click here!</a>",
+  "CreateReservationMail": "<h2>Your reservation  is ready!</h2> <a href='https://papellounge.de/Home/AuthorizeReservation?id=@reservation_id'>For reservation authorize please click here!</a>",
+  "CreateEmailRegistrationMail": "<h2>Your subscription is ready!</h2> <a href='https://papellounge.de/Home/AuthorizeSubscribe?id=@registration_id'>For email authorize please click here!</a>",
+  "KategorienBG": "2b01a6e1-165e-453d-89e9-de24e9474607.jpg",
+  "WhatsappBG": "a4949779-40cb-437f-aa06-0c4b0badb1dc.jpg"
 }

@@ -1,24 +1,40 @@
 ﻿@using EMY.Restaurant.Core.Application.Repositories.MenuCategoryRepositories
+@using EMY.Restaurant.Core.Domain.Common
 @using EMY.Restaurant.Infrastructure.Persistence
 @using EMY.Restaurant.Infrastructure.Persistence.Repositories.MenuCategoryRepositories
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Routing
 @using Microsoft.EntityFrameworkCore
 @inject IDatabaseFactory database;
 
 @{
-    ViewData["Title"] = "Kategorien";
+
     Layout = "~/Views/Shared/_ThemeFooresRestaurant.cshtml";
-    var Categories = database.MenuCategoryRead.Table.Include(o => o.Menus).Where(o => !o.IsDeleted && o.Menus.Count > 0).ToList();
+    string id = Guid.Empty.ToString();
+    if(ViewContext.HttpContext.Request.Query.TryGetValue("categoryid", out var ids)){
+        id = ids.ToString();
+    }
+
+    var masterCategory = database.MenuCategoryRead.Get(o => !o.IsDeleted && o.MenuCategoryID == id.ToGuid());
+    ViewData["Title"] = @masterCategory.Name;
+    var Categories = database.MenuCategoryRead.Table
+    .Include(o => o.Menus)
+    .Where(o => !o.IsDeleted && o.Menus.Count > 0 && o.MasterMenuCategoryID == id.ToGuid())
+    .OrderByDescending(o => o.CreatedAt)
+    .OrderBy(o => o.Index)
+    .ToList();
+
     int counter = 0;
 }
 
 <link href="/css/categories.css" rel="stylesheet">
 
-<div class="hero_single inner_pages background-image" data-background="url(/Themes/FooresRestaurant/img/hero_menu.jpg)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
+<div class="hero_single inner_pages background-image" data-background="url(/Uploads/Photos/@masterCategory.HeaderPhotoURL)" style="background-image: url(&quot;/Themes/FooresRestaurant/img/hero_menu.jpg&quot;);">
     <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)" style="background-color: rgba(0, 0, 0, 0.6);">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-9 col-lg-10 col-md-8">
-                    <h1>Kategorien</h1>
+                    <h1>@masterCategory.Name</h1>
                 </div>
             </div>
             <!-- /row -->

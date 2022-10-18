@@ -104,21 +104,22 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
         async Task<Guid> CheckAdminRole()
         {
 #if DEBUG
+
             var userGroups = databaseFactory.UserGroupRead.GetWhere(o => !o.IsDeleted);
-            var adminGroup = userGroups.FirstOrDefault(o => !o.IsDeleted && o.UserGroupCode == ControllerName);
+            var adminGroup = userGroups.FirstOrDefault(o => !o.IsDeleted && o.UserGroupCode == Forms.Admin.ToString());
             if (adminGroup == null)
             {
                 adminGroup = new UserGroup()
                 {
-                    UserGroupCode = ControllerName,
-                    UserGroupName = ControllerName,
+                    UserGroupCode = Forms.Admin.ToString(),
+                    UserGroupName = Forms.Admin.ToString(),
                     UserGroupToolTip = "Admin Group has all authorizes!"
                 };
                 await databaseFactory.UserGroupWrite.AddAsync(adminGroup, Guid.Empty);
                 var admingroupauthorize = new UserGroupRole()
                 {
                     AuthorizeType = AuthType.Full,
-                    FormName = ControllerName,
+                    FormName = Forms.Admin.ToString(),
                     UserGroupID = adminGroup.UserGroupID
                 };
                 await databaseFactory.UserGroupRoleWrite.AddAsync(admingroupauthorize, Guid.Empty);

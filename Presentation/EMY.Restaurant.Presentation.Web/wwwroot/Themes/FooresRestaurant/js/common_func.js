@@ -141,11 +141,11 @@
 	$('.carousel_testimonials').owlCarousel({
 	 	items:1,
 	    loop:true,
-		autoplay:false,
+		autoplay:true,
 	    animateIn: 'flipInX',
 		margin:40,
     	stagePadding:30,
-	    smartSpeed:300,
+		smartSpeed: 300,
 		responsiveClass:true,
 	    responsive:{
 	        600:{
