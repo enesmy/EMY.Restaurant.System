@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Presentation/EMY.Restaurant.Presentation.Web/wwwroot/Uploads/Documents/Speisekarte-Papel-1.pdf
