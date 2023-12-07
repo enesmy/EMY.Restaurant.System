@@ -27,9 +27,9 @@
                         <div class='row justify-content-center justify-content-md-@Html.Raw((slide.Side==ContentSide.Right?"end":"start"))'>
                             <div class='@Html.Raw((slide.Side==ContentSide.Middle? "col-lg-12 static":"col-lg-6 static"))'>
                                 <div class="slide-text @Html.Raw((slide.Side==ContentSide.Right?"text-end":(slide.Side==ContentSide.Middle?"text-center":""))) white">
-                                    <h2 class="owl-slide-animated owl-slide-title">@Html.Raw(@slide.Header)</h2>
+                                    <h2 class="owl-slide-animated owl-slide-title">@Html.Raw(@slide.Header??"")</h2>
                                     <p class="owl-slide-animated owl-slide-subtitle">
-                                        @Html.Raw(@slide.Content)
+                                        @Html.Raw(@slide.Content??"")
                                     </p>
 
                                 </div>
