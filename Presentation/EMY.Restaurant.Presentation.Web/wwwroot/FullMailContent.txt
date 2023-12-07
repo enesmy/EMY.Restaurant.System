@@ -1,0 +1,19 @@
+﻿<html>
+<head>
+<title>Ihre reservierung wurde bastätigt</title>
+</head>
+<body bgcolor="black" style="color:white;">
+<center>
+  <h2>
+<img src="https://papellounge.de/Themes/FooresRestaurant/img/divider.svg">
+<p>
+Bestätigung Liebe @Name @LastName, </br>
+Ihre reservierung wurde bastätigt!
+</p>
+<p>
+<b>Adresse</b></br>
+Bahnhofstrasse 4, 49393 Lohne</br>
+Oldenburg
+</p></h2>
+</center>
+</body></html>

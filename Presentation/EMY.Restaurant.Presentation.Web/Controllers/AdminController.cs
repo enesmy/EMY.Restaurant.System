@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace EMY.Restaurant.Presentation.Web.Controllers
 {
 
-    public class AdminController : Controller
+    public partial class AdminController : Controller
     {
 
         private IWebHostEnvironment Environment;
@@ -186,6 +186,27 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             return new Photo();
         }
 
+        [Microsoft.AspNetCore.Authorization.Authorize(SystemMainStatics.DefaultScheme)]
+        async Task<bool> UploadPDF(IFormFile formFile, string FileName)
+        {
+            Log.Debug("PDF Upload Started!");
+            if (formFile.ContentType.Equals("application/pdf"))
+            {
+                string wwwPath = this.Environment.WebRootPath;
+                string contentPath = this.Environment.ContentRootPath;
+                string path = Path.Combine(this.Environment.WebRootPath, "Uploads/Documents/");
+                string filePath = Path.Combine(path, FileName);
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    formFile.CopyTo(fileStream);
+                    return true;
+                }
+            }
+            return false;
+        }
 
         [HttpGet]
         [EMY_ISINROLE(Forms.MenuDesign, AuthType.Read)]
@@ -241,7 +262,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                     HeaderPhotoID = HeaderPhotoID,
                     HeaderPhotoURL = HeaderPhotoUrl,
                     LogoPhotoURL = LogoPhotoUrl,
-                    Index=index
+                    Index = index
                 };
                 await Database.MenuCategoryWrite.AddAsync(menuCategory, this.ActiveUserID());
                 return Ok();
@@ -361,16 +382,13 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                 result = await Database.MenuWrite.UpdateAsync(currentMenu, this.ActiveUserID());
             }
 
-
-
             if (result > 0)
             {
                 return Ok(menu);
             }
-            else
-            {
-                return BadRequest("Samething went wrong!");
-            }
+
+            return BadRequest("Samething went wrong!");
+
         }
 
         [HttpGet]
@@ -385,6 +403,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             }
             return PartialView("CreateOrEditMenu", menu);
         }
+
         [EMY_ISINROLE(Forms.MenuDesign, AuthType.Read)]
         public async Task<IActionResult> GetMenuDetailsAsync(string MenuID)
         {
@@ -408,6 +427,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             result.End = Enddt;
             return View(result);
         }
+
         [HttpPost]
         [EMY_ISINROLE(Forms.Reservation_Management, AuthType.Read)]
         public async Task<IActionResult> Reservations(DateTime Begin, DateTime End)
@@ -431,50 +451,46 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             {
                 return NotFound("Reservation not found!");
             }
-            if (reservation.ConfirmationStatus == status && status == ReservationConfirmationStatus.Confirmed)
-            {
-                return BadRequest("Reservation already confirmed!");
-            }
-            if (reservation.ConfirmationStatus == status && status == ReservationConfirmationStatus.Rejected)
-            {
-                return BadRequest("Reservation already rejected!");
-            }
+            if (reservation.ConfirmationStatus == status && status == ReservationConfirmationStatus.Confirmed) return BadRequest("Reservation already confirmed!");
+
+            if (reservation.ConfirmationStatus == status && status == ReservationConfirmationStatus.Rejected) return BadRequest("Reservation already rejected!");
+
 
             if (reservation.ConfirmationStatus == ReservationConfirmationStatus.Pending && status != ReservationConfirmationStatus.Authorized)
             {
                 return BadRequest("Reservation is pending, you can only change to authorized!");
             }
 
-
-
-
             reservation.ConfirmationStatus = status;
             await Database.ReservationWrite.UpdateAsync(reservation, this.ActiveUserID());
-            string confirmationMessage = "";
             switch (status)
             {
                 case ReservationConfirmationStatus.Confirmed:
-                    confirmationMessage = "confirmed!";
+                    await _mailSystem.SendEmail(reservation.Email, "Reservierungsbestätigung",
+                       HomePageConfiguration.ReservationAccept
+                       .Replace("@name", reservation.Name)
+                       .Replace("@count", reservation.NumberOfPeople.ToString())
+                       .Replace("@date_time", reservation.Date.ToString())
+                       , System.Net.Mail.MailPriority.High);
                     break;
                 case ReservationConfirmationStatus.Rejected:
-                    confirmationMessage = "rejected!";
+                    await _mailSystem.SendEmail(reservation.Email, "Reservierungsablehnung",
+                        HomePageConfiguration.ReservationDecline
+                        .Replace("@name", reservation.Name)
+                        , System.Net.Mail.MailPriority.High);
+
                     break;
                 case ReservationConfirmationStatus.Authorized:
-                    confirmationMessage = "authorized!";
                     break;
             }
 
-            await _mailSystem.SendEmail(reservation.Email, $"{Configuration.SystemName} Reservation Confirmation", $"Your reservation has been {confirmationMessage}", System.Net.Mail.MailPriority.High);
             return Ok(reservation);
         }
 
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddMailList(string email)
         {
-            if (string.IsNullOrEmpty(email))
-            {
-                return BadRequest("Email is required!");
-            }
+            if (string.IsNullOrEmpty(email)) return BadRequest("Email is required!");
             var mail = Database.MailListRead.Get(o => o.Email == email && !o.IsDeleted);
             if (mail == null)
             {
@@ -482,8 +498,8 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
 
                 return Ok();
             }
-            else
-                return BadRequest("Email already exists!");
+
+            return BadRequest("Email already exists!");
 
         }
 
@@ -566,23 +582,23 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
             return Ok(result.Message);
         }
 
+       
+
         [HttpPost]
         [EMY_ISINROLE(Forms.HomePageContentEditor, AuthType.Update)]
-        public async Task<IActionResult> UploadHomePageContent(string key, IFormFile photoContent)
+        public async Task<IActionResult> UploadMenu(string key, IFormFile menuContent)
         {
-
-            if (photoContent == null) return NoContent();
+            if (menuContent == null) return NoContent();
             try
             {
-                var photo = await UploadImageold(photoContent, generateThumb: false);
-                var result = HomePageConfiguration.SetValue(key, photo.PhotoID.ToString() + photo.Extention);
-                return Ok(result.Message);
+                var result = await UploadPDF(menuContent, key);
+                if (result) return Ok();
+                else return BadRequest();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [HttpGet]
@@ -659,57 +675,50 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                 menuCategory = await Database.MenuCategoryRead.GetByIdAsync(menuCategoryID.ToGuid());
             }
             return PartialView(menuCategory);
-
         }
 
         [HttpPost]
         [EMY_ISINROLE(Forms.MenuDesign, AuthType.Write)]
         public async Task<IActionResult> SaveSubCategory(string menuCategoryID, string masterMenuCategoryID, string name, string description, int index, IFormFile logoPhoto, IFormFile headerPhoto)
-        { 
-            
+        {
             string HeaderPhotoUrl = string.Empty;
-                Guid HeaderPhotoID = Guid.Empty;
+            Guid HeaderPhotoID = Guid.Empty;
 
-                string LogoPhotoUrl = string.Empty;
-                Guid LogoPhotoID = Guid.Empty;
+            string LogoPhotoUrl = string.Empty;
+            Guid LogoPhotoID = Guid.Empty;
 
-                if (headerPhoto != null)
+            if (headerPhoto != null)
+            {
+                var uploadedHeaderPhoto = new Photo();
+                if (logoPhoto == null)
                 {
-                    var uploadedHeaderPhoto = new Photo();
-                    if (logoPhoto == null)
-                    {
-                        uploadedHeaderPhoto = await UploadImage(headerPhoto, 1400, 780, 248, 248, true);
-                        LogoPhotoID = uploadedHeaderPhoto.PhotoID;
-                        LogoPhotoUrl = uploadedHeaderPhoto.PhotoID.ToString() + "_thumb" + uploadedHeaderPhoto.Extention;
-                    }
-                    else uploadedHeaderPhoto = await UploadImage(headerPhoto, width: 1400, height: 780, generateThumb: false);
-                    HeaderPhotoUrl = uploadedHeaderPhoto.PhotoID.ToString() + uploadedHeaderPhoto.Extention;
-                    HeaderPhotoID = uploadedHeaderPhoto.PhotoID;
-
+                    uploadedHeaderPhoto = await UploadImage(headerPhoto, 1400, 780, 248, 248, true);
+                    LogoPhotoID = uploadedHeaderPhoto.PhotoID;
+                    LogoPhotoUrl = uploadedHeaderPhoto.PhotoID.ToString() + "_thumb" + uploadedHeaderPhoto.Extention;
                 }
+                else uploadedHeaderPhoto = await UploadImage(headerPhoto, width: 1400, height: 780, generateThumb: false);
+                HeaderPhotoUrl = uploadedHeaderPhoto.PhotoID.ToString() + uploadedHeaderPhoto.Extention;
+                HeaderPhotoID = uploadedHeaderPhoto.PhotoID;
+            }
 
+            if (logoPhoto != null)
+            {
+                var uploadedLogoPhoto = await UploadImage(logoPhoto, width: 248, height: 248, generateThumb: false);
+                LogoPhotoUrl = uploadedLogoPhoto.PhotoID.ToString() + uploadedLogoPhoto.Extention; ;
+                LogoPhotoID = uploadedLogoPhoto.PhotoID;
+            }
 
-                if (logoPhoto != null)
-                {
-                    var uploadedLogoPhoto = await UploadImage(logoPhoto, width: 248, height: 248, generateThumb: false);
-                    LogoPhotoUrl = uploadedLogoPhoto.PhotoID.ToString() + uploadedLogoPhoto.Extention; ;
-                    LogoPhotoID = uploadedLogoPhoto.PhotoID;
-                }
             if (menuCategoryID.ToGuid() != Guid.Empty)
             {
                 var currentCategory = await Database.MenuCategoryRead.GetByIdAsync(menuCategoryID.ToGuid());
                 if (currentCategory == null)
                     return NotFound("Menu category is not found!");
 
-
-
-
                 if (headerPhoto != null)
                 {
                     currentCategory.HeaderPhotoID = HeaderPhotoID;
                     currentCategory.HeaderPhotoURL = HeaderPhotoUrl;
                 }
-
 
                 if (logoPhoto != null)
                 {
@@ -731,7 +740,7 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
                     Active = true,
                     Description = description,
                     Name = name,
-                    Index=index,
+                    Index = index,
                     LogoPhotoID = LogoPhotoID,
                     HeaderPhotoID = HeaderPhotoID,
                     HeaderPhotoURL = HeaderPhotoUrl,

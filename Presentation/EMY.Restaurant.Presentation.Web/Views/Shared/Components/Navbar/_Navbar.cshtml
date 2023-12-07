@@ -16,7 +16,14 @@
     var Categories = masterCategories.OrderByDescending(o => o.CreatedAt).OrderBy(o => o.Index).ToList();
 }
 <ul id="top_menu">
+    <li>
+        <a asp-controller="Home" class="whatsapp-menu-btn" asp-action="Whatsapp" style="color: #25D366;">
+            <i aria-hidden="true" style="font-size: 1.6125em;" class="fab fa-whatsapp"></i>
+        </a>
+    </li>
+
     <li><a href="#0" disabled class="search-overlay-menu-btn"></a></li>
+
     <li>
         <div class="dropdown dropdown-cart">
             <a asp-controller="Home" asp-action="ShopCart" class="cart_bt" data-bs-toggle="dropdown" aria-expanded="false">
@@ -52,11 +59,11 @@
         <li class="submenu">
             <a href="#" class="show-submenu">MENÜ</a>
             <ul>
-               @* <li>
-                    @Html.ActionLink("Speise Karte", "Categories","Home",new{ Speise = true})
+                @* <li>
+                @Html.ActionLink("Speise Karte", "Categories","Home",new{ Speise = true})
                 </li>
                 <li>
-                    @Html.ActionLink("Getränke Karte", "Categories","Home",new{ Speise = false})
+                @Html.ActionLink("Getränke Karte", "Categories","Home",new{ Speise = false})
                 </li>*@
                 @foreach (var item in Categories)
                 {
@@ -71,7 +78,7 @@
         </li>
         <li>
 
-            <a asp-controller="Home" asp-action="Whatsapp" target="_blank" style="color: #25D366;">WHATSAPP <i aria-hidden="true" class="fab fa-whatsapp"></i></a>
+
         </li>
     </ul>
 </nav>

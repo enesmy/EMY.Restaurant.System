@@ -1,9 +1,8 @@
 ﻿@using EMY.Restaurant.Infrastructure.Persistence
-@using Serilog
 @{
     ViewData["Title"] = "Dynamic Home Page";
     Layout = "~/Views/Shared/MaterialDashboard2/_ThemeMaterialDashboard2.cshtml";
-    Log.Debug("Header ok!");
+   
 }
 
 <table class="table table-sm table-responsive-md">
@@ -17,10 +16,10 @@
         <tr> <th scope="col" colspan="3">Under Slider</th></tr>
         <tr>
             <td>
-                First Picture 600x400px
+                First Picture 600x250px
             </td>
             <td>
-                <input id="FirstImage" name="FirstImage" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="FirstImage" name="FirstImage" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('FirstImage','FirstImage')">Save</button>
@@ -31,9 +30,6 @@
                 First Header
             </td>
             <td>
-                @{
-                    Log.Debug("First Editorfor");
-                }
                 @Html.EditorFor(modelItem => HomePageConfiguration.FirstHeader, new { htmlAttributes = new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } })
 
             </td>
@@ -69,10 +65,10 @@
         </tr>
         <tr>
             <td>
-                Second Picture 600x400px
+                Second Picture 600x250px
             </td>
             <td>
-                <input id="SecondImage" name="SecondImage" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="SecondImage" name="SecondImage"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('SecondImage','SecondImage')">Save</button>
@@ -117,10 +113,10 @@
         </tr>
         <tr>
             <td>
-                Third Picture 600x400px
+                Third Picture 600x250px
             </td>
             <td>
-                <input id="ThirdImage" name="ThirdImage" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="ThirdImage" name="ThirdImage"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('ThirdImage','ThirdImage')">Save</button>
@@ -163,12 +159,36 @@
         <tr>
             <td colspan="3"><hr style="border-top: 2px dashed black;"></td>
         </tr>
+        <tr> <th scope="col" colspan="3">Menu Contents</th></tr>
+        <tr>
+            <td>
+                Speisekarte
+            </td>
+            <td>
+                <input id="Speisekarte" name="Speisekarte"  type="file" accept=".pdf" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePDF('Speisekarte-Papel-1.pdf','Speisekarte')">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Getraenkekarte
+            </td>
+            <td>
+                <input id="Getraenkekarte" name="Getraenkekarte"  type="file" accept=".pdf" class="" style="width:100%; box-sizing: border-box;" />
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SavePDF('Getraenkekarte-Papel-1.pdf','Getraenkekarte')">Save</button>
+            </td>
+        </tr>
+
         <tr>
             <td>
                 Youtube Capture 350x440px
             </td>
             <td>
-                <input id="YoutubeVideoPhoto" name="YoutubeVideoPhoto" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="YoutubeVideoPhoto" name="YoutubeVideoPhoto"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('YoutubeVideoPhoto','YoutubeVideoPhoto')">Save</button>
@@ -215,7 +235,7 @@
                 Celebration Background
             </td>
             <td>
-                <input id="CelebrationImageUrl" name="CelebrationImageUrl" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="CelebrationImageUrl" name="CelebrationImageUrl"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('CelebrationImageUrl','CelebrationImageUrl')">Save</button>
@@ -433,7 +453,7 @@
         <tr>
             <td colspan="3"><hr /></td>
         </tr>
-         <tr>
+        <tr>
             <td>
                 Email Subscriptions Mail Content<br />
                 <button class="btn-sm btn-primary" href="#" onclick="CreateEmailRegistration()">
@@ -447,6 +467,35 @@
                 <button class="btn-sm btn-secondary" onclick="SaveContent('CreateEmailRegistrationMail',document.getElementById('CreateEmailRegistrationMail').value)">Save</button>
             </td>
         </tr>
+
+        <tr>
+            <td>
+                Reservation Accept Message<br />
+                <button class="btn-sm btn-primary" href="#" onclick="ReservationAccept()">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.ReservationAccept,  new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } )
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('ReservationAccept',document.getElementById('ReservationAccept').value)">Save</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Reservation Decline Message<br />
+                <button class="btn-sm btn-primary" href="#" onclick="ReservationDecline()">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </button>
+            </td>
+            <td>
+                @Html.TextAreaFor(modelItem => HomePageConfiguration.ReservationDecline,  new { @class = "", type="text", style="width:100%; box-sizing: border-box;" } )
+            </td>
+            <td>
+                <button class="btn-sm btn-secondary" onclick="SaveContent('ReservationDecline',document.getElementById('ReservationDecline').value)">Save</button>
+            </td>
+        </tr>
         <tr>
             <td colspan="3"><hr /></td>
         </tr>
@@ -455,7 +504,7 @@
                 Kategorien BG Photo
             </td>
             <td>
-                <input id="KategorienBG" name="KategorienBG" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="KategorienBG" name="KategorienBG"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('KategorienBG','KategorienBG')">Save</button>
@@ -467,19 +516,19 @@
                 Whatsapp BG Photo
             </td>
             <td>
-                <input id="WhatsappBG" name="WhatsappBG" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="WhatsappBG" name="WhatsappBG"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('WhatsappBG','WhatsappBG')">Save</button>
             </td>
         </tr>
 
-         <tr>
+        <tr>
             <td>
                 Others BG Photo
             </td>
             <td>
-                <input id="OthersBG" name="OthersBG" onchange="console.log(this);" type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
+                <input id="OthersBG" name="OthersBG"  type="file" accept=".jpg, .png, .jpeg, .bmp, .tif, .tiff" class="" style="width:100%; box-sizing: border-box;" />
             </td>
             <td>
                 <button class="btn-sm btn-secondary" onclick="SavePicture('OthersBG','OthersBG')">Save</button>
@@ -488,6 +537,7 @@
         <tr>
             <td colspan="3"><hr style="border-top: 2px dashed black;"></td>
         </tr>
+
     </tbody>
 </table>
 
@@ -520,7 +570,26 @@
             data: formData,
             success: function (response) {
                 MessageBox.ShowMessage('Succeed!');
-                location.reload();
+            },
+            error: function (err) {
+                MessageBox.Show('Error', err.responseText)
+            }
+        });
+    }
+
+    function SavePDF(key, idElement) {
+        var formData = new FormData();
+        formData.append('key', key);
+        formData.append('menuContent', document.getElementById(idElement).files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Admin/UploadMenu',
+            processData: false,
+            contentType: false,
+            data: formData,
+            success: function (response) {
+                MessageBox.ShowMessage('Succeed!');
             },
             error: function (err) {
                 MessageBox.Show('Error', err.responseText)
@@ -530,15 +599,15 @@
 
     function CreateOrderInformation() {
         var text = `
-                You can add this tags!
-                        <br>&#64;order_id
-                        <br>&#64;order_number
-                        <br>&#64;total_price
-                        <br>&#64;full_name
-                        <br>&#64;notes                       <br> <br>
-                    For authorization: <br>
-                  Domain(papellounge.de) + /Home/OrderAuthorize?id= + &#64;order_id
-                `;
+You can add this tags!
+        <br>&#64;order_id
+        <br>&#64;order_number
+        <br>&#64;total_price
+        <br>&#64;full_name
+        <br>&#64;notes                       <br> <br>
+    For authorization: <br>
+  Domain(papellounge.de) + /Home/OrderAuthorize?id= + &#64;order_id
+`;
         MessageBox.ShowHtml('Info!', text, null);
 
         document.getElementById('modalSave').hidden = true;
@@ -546,31 +615,36 @@
 
     function CreateReservationInformation() {
         var text = `
-                You can add this tags!
-                        <br>&#64;reservation_id
-                        <br>&#64;name
-                        <br>&#64;phone
-                        <br>&#64;message
-                        <br>&#64;people
-                             <br> <br>
-                            For authorization: <br>
-                                Domain(papellounge.de) + /Home/AuthorizeReservation?id= + &#64;reservation_id
-                `;
+ You can add this tags!
+ <br>&#64;reservation_id
+ <br>&#64;name
+ <br>&#64;phone
+ <br>&#64;message
+ <br>&#64;people
+ <br> <br>
+ For authorization:
+ <br>Domain(papellounge.de) + /Home/AuthorizeReservation?id= + &#64;reservation_id
+ `;
+        MessageBox.ShowHtml('Info!', text, null);
+
+        document.getElementById('modalSave').hidden = true;
+    }
+
+    function ReservationAccept() {
+        var text = `You can add this tags!<br>&#64;name<br>&#64;date_time<br>&#64;count`;
+        MessageBox.ShowHtml('Info!', text, null);
+
+        document.getElementById('modalSave').hidden = true;
+    }
+    function ReservationDecline() {
+        var text = `You can add this tags!<br>&#64;name`;
         MessageBox.ShowHtml('Info!', text, null);
 
         document.getElementById('modalSave').hidden = true;
     }
 
     function CreateEmailRegistration() {
-        var text = `
-                    You can add this tags!
-                        <br>&#64;registration_id
-                            <br>&#64;email
-                          
-                                 <br> <br>
-                                For authorization: <br>
-                                            Domain(papellounge.de) + /Home/AuthorizeSubscribe?id= + &#64;registration_id
-                    `;
+        var text = `You can add this tags!<br>&#64;registration_id<br>&#64;email<br> <br>For authorization: <br>Domain(papellounge.de) + /Home/AuthorizeSubscribe?id= + &#64;registration_id`;
         MessageBox.ShowHtml('Info!', text, null);
 
         document.getElementById('modalSave').hidden = true;

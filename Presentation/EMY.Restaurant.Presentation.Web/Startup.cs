@@ -28,7 +28,7 @@ namespace EMY.Restaurant.Presentation.Web
         {
             services.AddControllersWithViews();
             services.AddPersistanceServices();
-            Log.Debug("Servicess Added");
+            Log.Error("-1");
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -39,17 +39,16 @@ namespace EMY.Restaurant.Presentation.Web
                 options.AccessDeniedPath = "/Account/Login";
                 options.SlidingExpiration = true;
             });
-            Log.Information("Login page settings Ok");
+
             services.AddAuthentication(SystemMainStatics.DefaultScheme)
              .AddCookie(SystemMainStatics.DefaultScheme, options =>
              {
                  options.LoginPath = new PathString("/Account/Login");
                  options.AccessDeniedPath = "/Account/Login";
              });
-            Log.Information("AddAuthentication Ok");
 
         }
-
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -57,22 +56,18 @@ namespace EMY.Restaurant.Presentation.Web
                .MinimumLevel.Debug()
                .WriteTo.File(Environment.CurrentDirectory + "/logs/myapp.txt", rollingInterval: RollingInterval.Day)
                .CreateLogger();
-
+            Log.Error("0");
             if (env.IsDevelopment())
             {
-                Log.Information("Start IsDevelopment");
                 app.UseDeveloperExceptionPage();
-                Log.Information("IsDevelopment ok");
             }
             else
             {
-                Log.Information("Start Release and hsts");
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                Log.Information("End Release and hsts");
             }
-
+            
             var defaultCulture = new CultureInfo("de-DE");
             var localizationOptions = new RequestLocalizationOptions
             {
@@ -80,28 +75,20 @@ namespace EMY.Restaurant.Presentation.Web
                 SupportedCultures = new List<CultureInfo> { defaultCulture },
                 SupportedUICultures = new List<CultureInfo> { defaultCulture }
             };
+            Log.Error("1");
             app.UseRequestLocalization(localizationOptions);
-
-            Log.Information("Culture ok");
-
             app.UseHttpsRedirection();
-            Log.Information("app usehttpsredirections ok");
             app.UseStaticFiles();
-            Log.Information("Static files");
             app.UseRouting();
-            Log.Information("use rooting");
             app.UseAuthorization();
-            Log.Information("useauthorization");
             app.UseAuthentication();
-            Log.Information("useauthentication");
-
+            Log.Error("2");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-            Log.Information("map controller ok");
         }
     }
 }

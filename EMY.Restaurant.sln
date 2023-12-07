@@ -5,19 +5,24 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6F172B79-E2F6-4707-8F3C-D7148D2F2715}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMY.Restaurant.Core.Domain", "EMY.Restaurant.Core.Domain\EMY.Restaurant.Core.Domain.csproj", "{F5535FAF-2C58-4D0E-B2DC-541880A6ECC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMY.Restaurant.Core.Domain", "EMY.Restaurant.Core.Domain\EMY.Restaurant.Core.Domain.csproj", "{F5535FAF-2C58-4D0E-B2DC-541880A6ECC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMY.Restaurant.Core.Application", "Core\EMY.Restaurant.Core.Application\EMY.Restaurant.Core.Application.csproj", "{F8AC3560-B710-4191-A932-9FDEC4B916BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMY.Restaurant.Core.Application", "Core\EMY.Restaurant.Core.Application\EMY.Restaurant.Core.Application.csproj", "{F8AC3560-B710-4191-A932-9FDEC4B916BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{0C680708-E9BC-495C-9F05-1BEC8160F9E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMY.Restaurant.Infrastructure.Infrastructure", "Infrastructure\EMY.Restaurant.Infrastructure.Infrastructure\EMY.Restaurant.Infrastructure.Infrastructure.csproj", "{3363FA18-5F5C-44B1-8274-75EBC6AD5FE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMY.Restaurant.Infrastructure.Infrastructure", "Infrastructure\EMY.Restaurant.Infrastructure.Infrastructure\EMY.Restaurant.Infrastructure.Infrastructure.csproj", "{3363FA18-5F5C-44B1-8274-75EBC6AD5FE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMY.Restaurant.Infrastructure.Persistence", "Infrastructure\EMY.Restaurant.Infrastructure.Persistence\EMY.Restaurant.Infrastructure.Persistence.csproj", "{4D3A00D5-E161-40D8-9F89-C2DC160C98AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMY.Restaurant.Infrastructure.Persistence", "Infrastructure\EMY.Restaurant.Infrastructure.Persistence\EMY.Restaurant.Infrastructure.Persistence.csproj", "{4D3A00D5-E161-40D8-9F89-C2DC160C98AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{A0A6AD63-28EB-4D1E-9DB3-9078779B6789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMY.Restaurant.Presentation.Web", "Presentation\EMY.Restaurant.Presentation.Web\EMY.Restaurant.Presentation.Web.csproj", "{1B2F7692-EC3E-403C-B539-F1996B16933B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EMY.Restaurant.Presentation.Web", "Presentation\EMY.Restaurant.Presentation.Web\EMY.Restaurant.Presentation.Web.csproj", "{1B2F7692-EC3E-403C-B539-F1996B16933B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Çözüm Öğeleri", "Çözüm Öğeleri", "{5C7707B5-EB45-4394-99FE-B22A08801967}"
+	ProjectSection(SolutionItems) = preProject
+		Up to date notes.txt = Up to date notes.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

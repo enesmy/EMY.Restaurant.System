@@ -27,6 +27,7 @@ namespace EMY.Restaurant.Infrastructure.Persistence.Contexts
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<SliderContent> SliderContents { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

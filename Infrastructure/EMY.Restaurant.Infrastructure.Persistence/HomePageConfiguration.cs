@@ -335,6 +335,24 @@ namespace EMY.Restaurant.Infrastructure.Persistence
             }
         }
 
+        public static string ReservationAccept
+        {
+            get
+            {
+                string result = configuration["ReservationAccept"];
+                return result;
+            }
+        }
+
+        public static string ReservationDecline
+        {
+            get
+            {
+                string result = configuration["ReservationDecline"];
+                return result;
+            }
+        }
+
         public static string CreateEmailRegistrationMail
         {
             get

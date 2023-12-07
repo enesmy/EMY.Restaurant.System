@@ -81,38 +81,7 @@
 </ul>
 <!--/banners_grid -->
 
-<div class="pattern_2" id='reservationpanel'>
-    <div class="container margin_120_100 home_intro">
-        <div class="row justify-content-center d-flex align-items-center">
-            <div class="col-lg-5 text-lg-center d-none d-lg-block" data-cue="slideInUp">
-                <figure>
-                    <img src="/Uploads/Photos/@HomePageConfiguration.YoutubeVideoPhoto"
-                         data-src="/Uploads/Photos/@HomePageConfiguration.YoutubeVideoPhoto" width="354" height="440" alt=""
-                         class="img-fluid lazy">
-                    <a href="@HomePageConfiguration.YoutubeVideoUrl" class="btn_play" data-cue="zoomIn"
-                       data-delay="500"><span class="pulse_bt"><i class="arrow_triangle-right"></i></span></a>
-                </figure>
-            </div>
-            <div class="col-lg-5 pt-lg-4" data-cue="slideInUp" data-delay="500">
-                <div class="main_title">
-                    <span><em></em></span>
-                    <h2>@HomePageConfiguration.VideoRightsideHeader</h2>
-                    <p>
-                        @HomePageConfiguration.VideoRightsideHeader
-                    </p>
 
-                </div>
-
-                <p>
-                    <img src="/Themes/FooresRestaurant/img/signature.png" width="140" height="50" alt="" class="mt-3">
-                </p>
-            </div>
-        </div>
-        <!--/row -->
-    </div>
-    <!--/container -->
-</div>
-<!--/pattern_2 -->
 @if (todayFoods.Count > 0)
 {
     <div class="bg_gray">
@@ -122,7 +91,10 @@
                 <h2>Unser Tagesmenü</h2>
             </div>
             <!-- /main_title -->
-
+            <p class="text-center">
+                <a target="_blank" href="/Uploads/Documents/Getraenkekarte-Papel-1.pdf" class="btn_1 outline" data-cue="zoomIn">Getränkekarte</a>
+                <a target="_blank" href="/Uploads/Documents/Speisekarte-Papel-1.pdf" class="btn_1 outline" data-cue="zoomIn">Speisekarte</a>
+            </p>
             <div class="row magnific-gallery homepage add_bottom_25">
 
                 @foreach (var food in todayFoods)
@@ -156,17 +128,45 @@
 
             </div>
             <!-- /row -->
-            <p class="text-center">
-                <a target="_blank" href="/Uploads/Documents/Getraenkekarte-Papel-1.pdf" class="btn_1 outline" data-cue="zoomIn">Getränkekarte</a>
-                <a target="_blank" href="/Uploads/Documents/Speisekarte-Papel-1.pdf" class="btn_1 outline" data-cue="zoomIn">Speisekarte</a>
-            </p>
+          
         </div>
         <!-- /container -->
     </div>
     <!-- /bg_gray -->
 }
 
+<div class="pattern_2" id='reservationpanel'>
+    <div class="container margin_120_100 home_intro">
+        <div class="row justify-content-center d-flex align-items-center">
+            <div class="col-lg-5 text-lg-center d-none d-lg-block" data-cue="slideInUp">
+                <figure>
+                    <img src="/Uploads/Photos/@HomePageConfiguration.YoutubeVideoPhoto"
+                         data-src="/Uploads/Photos/@HomePageConfiguration.YoutubeVideoPhoto" width="354" height="440" alt=""
+                         class="img-fluid lazy">
+                    <a href="@HomePageConfiguration.YoutubeVideoUrl" class="btn_play" data-cue="zoomIn"
+                       data-delay="500"><span class="pulse_bt"><i class="arrow_triangle-right"></i></span></a>
+                </figure>
+            </div>
+            <div class="col-lg-5 pt-lg-4" data-cue="slideInUp" data-delay="500">
+                <div class="main_title">
+                    <span><em></em></span>
+                    <h2>@HomePageConfiguration.VideoRightsideHeader</h2>
+                    <p>
+                        @HomePageConfiguration.VideoRightsideHeader
+                    </p>
 
+                </div>
+
+                <p>
+                    <img src="/Themes/FooresRestaurant/img/signature.png" width="140" height="50" alt="" class="mt-3">
+                </p>
+            </div>
+        </div>
+        <!--/row -->
+    </div>
+    <!--/container -->
+</div>
+<!--/pattern_2 -->
 
 <div class="call_section lazy" data-bg="url(/Uploads/Photos/@HomePageConfiguration.CelebrationImageUrl)">
     <div class="container clearfix">

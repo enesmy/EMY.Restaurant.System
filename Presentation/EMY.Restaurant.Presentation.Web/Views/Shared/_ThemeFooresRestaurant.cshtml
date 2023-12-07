@@ -8,11 +8,11 @@
 </head>
 
 <body>
-<script>
-    var shopcardflag = false;
-    var checkoutflag = false;
+    <script>
+        var shopcardflag = false;
+        var checkoutflag = false;
 
-</script>
+    </script>
 
     <div id="preloader">
         <div data-loader="circle-side"></div>
@@ -23,8 +23,8 @@
         <div class="container-fluid">
             <div id="logo">
                 <a href="/">
-                    <img src="/img/Logo/papel-white-icon.png"  height="35" alt="" class="logo_normal">
-                    <img src="/img/Logo/papel-black-icon.png"  height="35" alt="" class="logo_sticky">
+                    <img src="/img/Logo/papel-white-icon.png" height="35" alt="" class="logo_normal">
+                    <img src="/img/Logo/papel-black-icon.png" height="35" alt="" class="logo_sticky">
                 </a>
             </div>
 
@@ -48,7 +48,7 @@
 
     <main>
 
-        @RenderBody();
+        @RenderBody()
 
     </main>
     <!-- /main -->
@@ -57,9 +57,9 @@
     <!--/footer-->
 
     <div id="toTop"></div><!-- Back to top button -->
-  
 
-   
+
+
 
     <div class="modal fade" id="MessageboxModal" data-bs-backdrop='static' data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="messageboxModalLabel" aria-modal="true">
         <div class="modal-dialog" role="document">
@@ -69,9 +69,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="messageboxModalContent">
-                  content
+                    content
                 </div>
-                
+
                 <div class="modal-footer">
                     <button class="btn btn-success" type="button" onclick="MessageBox.saveClicked()" id="modalSave" data-bs-dismiss="modal">Save</button>
                     <button class="btn btn-success" type="button" onclick="MessageBox.yesClicked()" id="modalYes" data-bs-dismiss="modal">Yes</button>
@@ -82,8 +82,79 @@
         </div>
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal bottom fade" id="cookieconsent3" tabindex="-1" style="z-index: 99999;" aria-labelledby="cookieconsentLabel3" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content d-block text-start">
+                <div class="modal-header d-block ">
+                    <h5 class="modal-title" id="cookieconsentLabel3">Privatsphäre</h5>
+                    <p>
+                        Papellounge.de verwendet Cookies, um zu gewährleisten, dass deine Websites gut funktionieren, sicher sind und du eine ausgezeichnete Nutzererfahrung genießt.
+                    </p>
+
+                </div>
+                <div class="modal-body">
+                    <!-- Necessary checkbox -->
+                    <div class="form-check">
+                        <input class="form-check-input" disabled type="checkbox" value="" id="necessary" checked />
+                        <label class="form-check-label" for="necessary">
+                            <p>
+                                <strong>Notwendige Kekse</strong>
+                                <muted>Die Grundfunktionalität unserer Website.</muted>
+                            </p>
+                        </label>
+                    </div>
+                    <!-- googlecookie checkbox -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="googlecookie" />
+                        <label class="form-check-label" for="googlecookie">
+                            <p>
+                                <strong>Google-Cookies</strong>
+                                <muted>Cookies, die von Google zu Informationszwecken gesammelt werden. Bitte beachten Sie, dass wir unseren Standort nicht auf der Karte anzeigen können, wenn Sie keine von Google gesammelten Cookies akzeptieren.</muted>
+                            </p>
+                        </label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" onclick="acceptSelected()" data-bs-dismiss="modal">
+                        Accept Selected
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" onclick="acceptNecessary()" data-bs-dismiss="modal">
+                        Accept necessary
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="acceptAll()" data-bs-dismiss="modal">
+                        Accept all
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- /.modal -->
     @await Component.InvokeAsync("JsFiles")
+    <script>
 
+        window.addEventListener('DOMContentLoaded', () => {
+            var result = getConsentStorage('consentStorage')
+
+            if (result == null) {
+                $('#cookieconsent3').modal('show')
+            }
+            loadGoogleMaps();
+           
+        });
+        function loadGoogleMaps(){
+            var result = getConsentStorage('consentStorage')
+             if (result == 'L') {
+                var googlemaps = ' <iframe style="height: 225px; width: 100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Bahnhofstra%C3%9Fe%204%2C%2049393%20Lohne%20%28Oldenburg%29&amp;t=m&amp;z=14&amp;output=embed&amp;iwloc=near" aria-label="Bahnhofstraße 4, 49393 Lohne (Oldenburg)"></iframe>'
+                var googleelement = document.getElementById('googlemaps');
+                googleelement.innerHTML = googlemaps;
+            }
+        }
+
+        
+    </script>
 </body>
 </html>

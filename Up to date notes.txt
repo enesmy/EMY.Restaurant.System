@@ -1,0 +1,4 @@
+1 Show in home page checkbox u deactive olmuyor.
+2 https://papellounge.de/Admin/HomePageSlider header ve content girmeden de kayýt oluþturulabilsin.
+3 tema güncellenecek.
+4 update olmalý https://papellounge.de/Admin/HomePageSlider

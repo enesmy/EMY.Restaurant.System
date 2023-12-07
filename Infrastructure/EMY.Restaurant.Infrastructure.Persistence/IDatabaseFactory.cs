@@ -5,6 +5,7 @@ using EMY.Restaurant.Core.Application.Repositories.OrderItemRepositories;
 using EMY.Restaurant.Core.Application.Repositories.OrderRepositories;
 using EMY.Restaurant.Core.Application.Repositories.PasswordHistoryRepositories;
 using EMY.Restaurant.Core.Application.Repositories.PhotoRepositories;
+using EMY.Restaurant.Core.Application.Repositories.PostRepositories;
 using EMY.Restaurant.Core.Application.Repositories.ReservationRepositories;
 using EMY.Restaurant.Core.Application.Repositories.SliderContentRepositories;
 using EMY.Restaurant.Core.Application.Repositories.UserGroupRepositories;
@@ -51,6 +52,8 @@ namespace EMY.Restaurant.Infrastructure.Persistence
         public ISliderContentReadRepository SliderContentRead { get; set; }
         public ISliderContentWriteRepository SliderContentWrite { get; set; }
 
+        public IPostReadRepository PostRead { get; set; }
+        public IPostWriteRepository PostWrite { get; set; }
         
     }
 }

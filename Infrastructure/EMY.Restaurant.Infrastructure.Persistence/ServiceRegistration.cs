@@ -6,6 +6,7 @@ using EMY.Restaurant.Core.Application.Repositories.OrderItemRepositories;
 using EMY.Restaurant.Core.Application.Repositories.OrderRepositories;
 using EMY.Restaurant.Core.Application.Repositories.PasswordHistoryRepositories;
 using EMY.Restaurant.Core.Application.Repositories.PhotoRepositories;
+using EMY.Restaurant.Core.Application.Repositories.PostRepositories;
 using EMY.Restaurant.Core.Application.Repositories.ReservationRepositories;
 using EMY.Restaurant.Core.Application.Repositories.SliderContentRepositories;
 using EMY.Restaurant.Core.Application.Repositories.UserGroupRepositories;
@@ -20,6 +21,7 @@ using EMY.Restaurant.Infrastructure.Persistence.Repositories.MenuCategoryReposit
 using EMY.Restaurant.Infrastructure.Persistence.Repositories.MenuRepositories;
 using EMY.Restaurant.Infrastructure.Persistence.Repositories.PasswordHistoryRepositories;
 using EMY.Restaurant.Infrastructure.Persistence.Repositories.PhotoRepositories;
+using EMY.Restaurant.Infrastructure.Persistence.Repositories.PostRepositories;
 using EMY.Restaurant.Infrastructure.Persistence.Repositories.ReservationRepositories;
 using EMY.Restaurant.Infrastructure.Persistence.Repositories.SliderContentRepositories;
 using EMY.Restaurant.Infrastructure.Persistence.Repositories.UserGroupRepositories;
@@ -56,6 +58,7 @@ namespace EMY.Restaurant.Infrastructure.Persistence
             services.AddScoped<IUserReadRepository, UserReadRepository>();
             services.AddScoped<IPasswordHistoryReadRepository, PasswordHistoryReadRepository>();
             services.AddScoped<ISliderContentReadRepository, SliderContentReadRepository>();
+            services.AddScoped<IPostReadRepository, PostReadRepository>();
         }
 
         public static void AddPersistanceServicesWrites(this IServiceCollection services)
@@ -72,6 +75,7 @@ namespace EMY.Restaurant.Infrastructure.Persistence
             services.AddScoped<IUserWriteRepository, UserWriteRepository>();
             services.AddScoped<IPasswordHistoryWriteRepository, PasswordHistoryWriteRepository>();
             services.AddScoped<ISliderContentWriteRepository, SliderContentWriteRepository>();
+            services.AddScoped<IPostWriteRepository, PostWriteRepository>();
         }
     }
 }

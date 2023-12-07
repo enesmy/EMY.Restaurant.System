@@ -71,7 +71,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var menu in menuCategory.Menus.OrderByDescending(o => o.CreatedAt).OrderBy(o => o.Index).ToList())
+                                @foreach (var menu in menuCategory.Menus.Where(o=>!o.IsDeleted).OrderByDescending(o => o.CreatedAt).OrderBy(o => o.Index).ToList())
                                 {
                                     <tr class="bg-success text-white">
                                         <td style="width:50px;">
@@ -135,7 +135,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var menu in subcategory.Menus)
+                                    @foreach (var menu in subcategory.Menus.Where(o => !o.IsDeleted))
                                     {
                                         <tr class="bg-success text-white">
                                             <td style="width:50px;">
@@ -323,8 +323,8 @@
         formData.append('DayOfWeek', document.getElementById('DayOfWeek').value);
         formData.append('DayOfWeekPrice', document.getElementById('DayOfWeekPrice').value.toString().replace('.', ','));
         formData.append('Index', document.getElementById('Index').value);
-        formData.append('ShowInHomePage', document.getElementById('ShowInHomePage').value);
-       
+        formData.append('ShowInHomePage', document.getElementById('ShowInHomePage').checked);
+
         $.ajax({
             type: 'POST',
             url: '/Admin/SaveMenu',

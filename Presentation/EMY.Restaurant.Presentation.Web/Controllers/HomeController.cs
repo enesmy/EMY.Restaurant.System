@@ -53,9 +53,16 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
         {
             var reservation = await databaseFactory.ReservationRead.GetByIdAsync(id.ToGuid());
             if (reservation == null) return NotFound();
-            reservation.ConfirmationStatus = ReservationConfirmationStatus.Authorized;
-            await databaseFactory.ReservationWrite.UpdateAsync(reservation, this.ActiveUserID());
+            if (reservation.ConfirmationStatus == ReservationConfirmationStatus.Pending)
+            {
+                await _emailService.SendEmail(CredentialInformationConfiguration.MailAdress,
+                $"Rezervation about {reservation.Name}", $"Rezervation is confirmed from customer. Please check our reservation page. {reservation.Name + " " + reservation.Email + " " + reservation.Phone}", MailPriority.High
+                );
+                reservation.ConfirmationStatus = ReservationConfirmationStatus.Authorized;
+                await databaseFactory.ReservationWrite.UpdateAsync(reservation, this.ActiveUserID());
+             }  
             ViewBag.reservation = reservation;
+            
             return View();
         }
 
@@ -102,24 +109,32 @@ namespace EMY.Restaurant.Presentation.Web.Controllers
 
             string emailregistrationmailcontent = HomePageConfiguration.CreateEmailRegistrationMail;
             emailregistrationmailcontent = emailregistrationmailcontent
-                .Replace("@registration_id",id.ToString())
+               .Replace("@registration_id", id.ToString())
                .Replace("@email", email_reserve);
 
 
-            var mail = await _emailService.SendEmail(email_reserve, "Reservation Authorization", $"{reservationmailcontent}" +
-                $"" +
-               (subscribemaillist ? emailregistrationmailcontent : ""), System.Net.Mail.MailPriority.Normal);
-
+            var mail = await _emailService.SendEmail(email_reserve, "Reservation Authorization", $"{reservationmailcontent}" + (subscribemaillist ? emailregistrationmailcontent : ""), System.Net.Mail.MailPriority.Normal);
+          
             if (!mail.IsSuccess)
             {
                 return Problem(mail.Message);
             }
 
+            
+            return RedirectToAction(nameof(WaitingMailResult),new {id= id});
 
-
-            return RedirectToAction(nameof(Index));
         }
-
+        public async Task<IActionResult> WaitingMailResult(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+            var reservation = await databaseFactory.ReservationRead.GetByIdAsync(id.ToGuid());
+            MailAddress addr = new MailAddress(reservation.Email);
+            ViewBag.domain = "https://"+addr.Host;
+            
+            ViewBag.id = id;
+            return View();
+        }
         public async Task<IActionResult> ShopCart() => View();
         public async Task<IActionResult> CheckOut() => View();
         public async Task<IActionResult> Search(string q)

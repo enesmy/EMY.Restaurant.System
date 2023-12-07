@@ -31,6 +31,10 @@ function getStorage(key) {
 
 function setStorage(key, value, expires) {
 
+    storageConsent = getStorage(consentCookieName)
+
+    if (!(storageConsent == 'S' || storageConsent == 'L')) return;
+
     if (expires === undefined || expires === null) {
         expires = 30;  // default: seconds for 1 day
     } else {
@@ -47,6 +51,47 @@ function setStorage(key, value, expires) {
         return false;
     }
     return true;
+}
+
+function getConsentStorage(key) {
+    try {
+        var value = localStorage.getItem(key);
+        return value;
+    } catch (e) {
+        console.log('getStorage: Error reading key [' + key + '] from localStorage: ' + JSON.stringify(e));
+        return null;
+    }
+}
+function setConsentStorage(key, value) {
+      console.log(key,value)
+    try {
+        localStorage.setItem(key, value);
+    } catch (e) {
+        console.log('setStorage: Error setting key [' + key + '] in localStorage: ' + JSON.stringify(e));
+        return false;
+    }
+    loadGoogleMaps();
+    return true;
+}
+var consentCookieName = "consentStorage";
+
+function acceptAll() {
+    setConsentStorage(consentCookieName, 'L');
+    console.log('accpetall');
+}
+
+function acceptNecessary() {
+    setConsentStorage(consentCookieName, 'S');
+    console.log('acceptNecessary');
+}
+
+function acceptSelected() {
+    if (document.getElementById('googlecookie').checked) {
+        acceptAll(consentCookieName)
+    }
+    else {
+        acceptNecessary(consentCookieName)
+    }
 }
 
 function getBasketItems() {

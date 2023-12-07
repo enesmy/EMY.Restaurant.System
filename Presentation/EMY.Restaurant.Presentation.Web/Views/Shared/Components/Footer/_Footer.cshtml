@@ -41,7 +41,7 @@
             </div>
         </div>
         <div class="row">
-            <iframe style="height: 225px;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=Bahnhofstra%C3%9Fe%204%2C%2049393%20Lohne%20%28Oldenburg%29&amp;t=m&amp;z=14&amp;output=embed&amp;iwloc=near" aria-label="Bahnhofstraße 4, 49393 Lohne (Oldenburg)"></iframe>
+           <div id="googlemaps"></div>
         </div>
         <!-- /row-->
         <hr>
@@ -51,14 +51,17 @@
                     © Papel Lounge
                     - <a style="cursor:pointer;" onclick=" $('#Impressummodel').modal('show');">Impressum</a>
                     - <a style="cursor:pointer;" onclick=" $('#Datenschutzerklarungmodel').modal('show');">Datenschutz</a>
+                    - <a data-bs-toggle="modal" style="cursor:pointer;" data-bs-target="#cookieconsent3">
+                        Launch cookie consent
+                    </a>
                 </p>
             </div>
             <div class="col-sm-7">
                 <div class="follow_us">
                     <ul>
-                    @*    <li><a href="#0"><img src="/Themes/FooresRestaurant/img/twitter_icon.svg" 
-                            data-src="/Themes/FooresRestaurant/img/twitter_icon.svg" alt="" class="lazy loaded" 
-                            data-was-processed="true"></a></li>*@
+                        @*    <li><a href="#0"><img src="/Themes/FooresRestaurant/img/twitter_icon.svg"
+                        data-src="/Themes/FooresRestaurant/img/twitter_icon.svg" alt="" class="lazy loaded"
+                        data-was-processed="true"></a></li>*@
                         <li><a href="@Html.Raw(@HomePageConfiguration.FaceBook)" target="_blank"><img src="/Themes/FooresRestaurant/img/facebook_icon.svg" data-src="/Themes/FooresRestaurant/img/facebook_icon.svg" alt="" class="lazy loaded" data-was-processed="true"></a></li>
                         <li><a href="@Html.Raw(@HomePageConfiguration.Instagram)" target="_blank"><img src="/Themes/FooresRestaurant/img/instagram_icon.svg" data-src="/Themes/FooresRestaurant/img/instagram_icon.svg" alt="" class="lazy loaded" data-was-processed="true"></a></li>
                         <li><a href="@Html.Raw(@HomePageConfiguration.Youtube)" target="_blank"><img src="/Themes/FooresRestaurant/img/youtube_icon.svg" data-src="/Themes/FooresRestaurant/img/youtube_icon.svg" alt="" class="lazy loaded" data-was-processed="true"></a></li>
@@ -78,7 +81,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="ImpressumModalContent">
-                   @Html.Raw(@HomePageConfiguration.Impressum)
+                    @Html.Raw(@HomePageConfiguration.Impressum)
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" id="modalClose" data-bs-dismiss="modal">Close</button>
@@ -93,10 +96,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="DatenschutzerklarungModalLabel">Datenschutzerklärung</h4>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-black" id="DatenschutzerklarungModalContent">
-                        @Html.Raw(@HomePageConfiguration.Datenschutz)                  
+                    @Html.Raw(@HomePageConfiguration.Datenschutz)
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" id="modalClose" data-bs-dismiss="modal">Close</button>
@@ -104,6 +107,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         function sendMail() {
@@ -115,11 +119,11 @@
                     __RequestVerificationToken: gettoken(),
                     email: mail
                 },
-                function(data) {
+                function (data) {
                     MessageBox.ShowMessage('We added your email adres!');
                     document.getElementById("emailadress").value = '';
                 },
-                function(data) {
+                function (data) {
                     MessageBox.Show('Error!', data.responseText)
                 }
             );

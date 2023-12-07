@@ -1027,7 +1027,23 @@ ul#top_menu li {
             transition: opacity 0.5s ease;
         }
 
-            ul#top_menu li a.cart_bt.cart_bt, ul#top_menu li a.search-overlay-menu-btn.cart_bt {
+            ul#top_menu li a.cart_bt.cart_bt, ul#top_menu li a.whatsapp-menu-btn.cart_bt {
+                top: 5px;
+            }
+        ul#top_menu li a.cart_bt, ul#top_menu li a.whatsapp-menu-btn {
+            display: block;
+            width: 22px;
+            height: 23px;
+            position: absolute;
+            top: 7px;
+            -moz-transition: opacity 0.5s ease;
+            -o-transition: opacity 0.5s ease;
+            -webkit-transition: opacity 0.5s ease;
+            -ms-transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease;
+        }
+
+            ul#top_menu li a.cart_bt.cart_bt, ul#top_menu li a.whatsapp-menu-btn.cart_bt {
                 top: 5px;
             }
 
@@ -1035,10 +1051,17 @@ ul#top_menu li {
     ul#top_menu li a.cart_bt.cart_bt, ul#top_menu li a.search-overlay-menu-btn.cart_bt {
         top: 2px;
     }
+    ul#top_menu li a.cart_bt.cart_bt, ul#top_menu li a.whatsapp-menu-btn.cart_bt {
+        top: 2px;
+    }
 }
 
 @media (max-width: 991px) {
     ul#top_menu li a.cart_bt, ul#top_menu li a.search-overlay-menu-btn {
+        top: 2px;
+        right: 5px;
+    }
+    ul#top_menu li a.cart_bt, ul#top_menu li a.whatsapp-menu-btn {
         top: 2px;
         right: 5px;
     }
@@ -1065,8 +1088,13 @@ ul#top_menu li a.cart_bt strong, ul#top_menu li a.search-overlay-menu-btn strong
     color: #fff !important;
 }
 
+
+
 @media (max-width: 767px) {
     ul#top_menu li a.cart_bt strong, ul#top_menu li a.search-overlay-menu-btn strong {
+        bottom: -3px;
+    }
+    ul#top_menu li a.cart_bt strong, ul#top_menu li a.whatsapp-menu-btn strong {
         bottom: -3px;
     }
 }
@@ -1106,6 +1134,60 @@ ul#top_menu li a.search-overlay-menu-btn:before {
 }
 
 .sticky ul#top_menu li a.search-overlay-menu-btn:before {
+    color: #444;
+}
+
+
+ul#top_menu li a.cart_bt strong, ul#top_menu li a.whatsapp-menu-btn strong {
+    font-size: 10px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    text-indent: 0;
+    display: block;
+    text-align: center;
+    position: absolute;
+    bottom: -4px;
+    right: -3px;
+    line-height: 17px !important;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #262626;
+    color: #fff !important;
+}
+ul#top_menu li a.cart_bt:before, ul#top_menu li a.whatsapp-menu-btn:before {
+
+    font-size: 21px;
+    font-size: 1.3125rem;
+    text-indent: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: normal;
+    line-height: 1;
+}
+
+.sticky ul#top_menu li a.cart_bt:before, .sticky ul#top_menu li a.whatsapp-menu-btn:before {
+    color: #444;
+}
+
+ul#top_menu li a.whatsapp-menu-btn {
+    position: relative;
+    margin-right: 10px;
+}
+
+@media (max-width: 991px) {
+    ul#top_menu li a.whatsapp-menu-btn {
+        top: 3px;
+        right: 25px;
+    }
+}
+
+
+.sticky ul#top_menu li a.whatsapp-menu-btn:before {
     color: #444;
 }
 
